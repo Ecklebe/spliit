@@ -21,7 +21,7 @@ import {
   SyncedGroupsList,
 } from './components'
 
-export function SettingsContent() {
+export function SettingsContent({ enableAdmin }: { enableAdmin: boolean }) {
   const { data: sessionData, status } = useSession()
   // Cast: useSession()'s declared Session type resolves against
   // @zitadel/next-auth's own nested @auth/core copy, which our roles
@@ -48,7 +48,7 @@ export function SettingsContent() {
       <div className="flex items-center gap-3">
         <Settings2 className="w-8 h-8" />
         <h1 className="text-3xl font-bold flex-1">{t('title')}</h1>
-        {session?.user?.roles?.includes('admin') && (
+        {enableAdmin && session?.user?.roles?.includes('admin') && (
           <Button variant="outline" size="sm" asChild>
             <Link href="/admin">{adminT('title')}</Link>
           </Button>

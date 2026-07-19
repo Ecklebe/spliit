@@ -11,5 +11,5 @@ export default function SettingsPage() {
   // Fully hidden, not just unlinked, when no OIDC provider is configured -
   // see featureFlags.ts's enableLogin.
   if (env.OIDC_PROVIDERS.length === 0) notFound()
-  return <SettingsContent />
+  return <SettingsContent enableAdmin={env.ENABLE_ADMIN} />
 }

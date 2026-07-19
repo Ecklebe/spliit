@@ -10,6 +10,11 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminPage() {
+  // Off by default, like Traefik's own /dashboard entrypoint - an operator
+  // opts in explicitly with ENABLE_ADMIN, independent of whether login/sync
+  // is configured at all.
+  if (!env.ENABLE_ADMIN) notFound()
+
   // Fully hidden - not just unlinked - when login is disabled or the
   // current user has no admin grant, same as /settings and /api/auth/*.
   if (env.OIDC_PROVIDERS.length === 0) notFound()

@@ -59,6 +59,16 @@ const envSchema = z
           .map((id) => id.trim().toLowerCase())
           .filter(Boolean),
       ),
+    // /admin (read-only instance stats) is off by default, same as Traefik's
+    // own /dashboard entrypoint - an operator opts in explicitly. When on,
+    // access is still gated by an OIDC "admin" role grant (see
+    // auth.ts/getServerSession) - enabling this with no OIDC provider
+    // configured just leaves the page permanently unreachable, since no one
+    // can ever hold that role without a login path.
+    ENABLE_ADMIN: z.preprocess(
+      interpretEnvVarAsBool,
+      z.boolean().default(false),
+    ),
   })
   .superRefine((env, ctx) => {
     if (env.OIDC_PROVIDERS.length > 0 && !env.AUTH_SECRET) {

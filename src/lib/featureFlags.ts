@@ -11,6 +11,10 @@ export async function getRuntimeFeatureFlags() {
     // banner) unless at least one OIDC provider is configured - see
     // env.ts's oidcProviders for how providers get registered.
     enableLogin: env.OIDC_PROVIDERS.length > 0,
+    // /admin (read-only instance stats), like Traefik's own /dashboard
+    // entrypoint - off by default, independent of enableLogin. Actual
+    // access still requires an OIDC "admin" role grant (see admin/page.tsx).
+    enableAdmin: env.ENABLE_ADMIN,
   }
 }
 
