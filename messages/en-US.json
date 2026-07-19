@@ -8,7 +8,8 @@
     }
   },
   "Header": {
-    "groups": "Groups"
+    "groups": "Groups",
+    "settings": "Settings"
   },
   "Footer": {
     "madeIn": "Made in Montréal, Québec 🇨🇦",
@@ -65,7 +66,9 @@
     "NoRecent": {
       "description": "You have not visited any group recently.",
       "create": "Create one",
-      "orAsk": "or ask a friend to send you the link to an existing one."
+      "orAsk": "or ask a friend to send you the link to an existing one.",
+      "enableCloudSync": "Enable cloud sync",
+      "enableCloudSyncHelp": "to access your groups across devices."
     },
     "recent": "Recent groups",
     "starred": "Starred groups",
@@ -93,6 +96,27 @@
         "noCamera": "No camera found on this device.",
         "cameraError": "Failed to start camera. Please try again.",
         "permissionError": "Unable to access camera. Please check permissions."
+      }
+    },
+    "Card": {
+      "actions": {
+        "unsyncTooltip": "Unsync from cloud",
+        "syncTooltip": "Sync to cloud",
+        "unfavoriteTooltip": "Remove from favorites",
+        "favoriteTooltip": "Add to favorites"
+      },
+      "toast": {
+        "unsyncRemoved": {
+          "title": "Group removed and unsynced",
+          "description": "The group has been removed from this device and unsynced from your account"
+        }
+      },
+      "unsyncDialog": {
+        "title": "Remove synced group",
+        "description": "This group is synced to your account. What would you like to do?",
+        "actions": {
+          "removeAndUnsync": "Remove and unsync"
+        }
       }
     },
     "NotFound": {
@@ -434,7 +458,67 @@
     "empty": "No group information yet."
   },
   "Settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "sections": {
+      "account": "Account",
+      "preferences": "Preferences",
+      "actions": "Actions",
+      "syncedGroups": "Synced Groups"
+    },
+    "CloudSync": {
+      "title": "Cloud Sync",
+      "description": {
+        "signedIn": "Manage your synced groups and preferences",
+        "signedOut": "Sign in to sync your groups across devices"
+      }
+    },
+    "SignIn": {
+      "success": {
+        "title": "Check your email for the magic link",
+        "body": "We sent a sign-in link to {email}"
+      },
+      "actions": {
+        "tryDifferentEmail": "Try different email",
+        "sending": "Sending...",
+        "send": "Send magic link"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "your@email.com"
+      }
+    },
+    "Account": {
+      "signedInAs": "Signed in as",
+      "signOut": "Sign out",
+      "signOutDialog": {
+        "description": "Do you want to clear synced groups from this device?",
+        "keepGroups": "No, keep groups",
+        "clearGroups": "Yes, clear groups"
+      }
+    },
+    "SyncPreferences": {
+      "syncNewGroups": {
+        "label": "Sync new groups automatically",
+        "description": "Automatically sync when visiting or creating groups"
+      }
+    },
+    "SyncAll": {
+      "actions": {
+        "syncing": "Syncing...",
+        "syncNow": "Sync all groups now"
+      },
+      "result": {
+        "synced": "Synced {count} group(s)",
+        "skipped": "Skipped {count} group(s)"
+      }
+    },
+    "SyncedGroups": {
+      "empty": "No synced groups yet",
+      "count": "{count} group(s) synced to the cloud",
+      "actions": {
+        "unsync": "Unsync"
+      }
+    }
   },
   "Share": {
     "title": "Share",
@@ -545,6 +629,63 @@
     },
     "other": {
       "heading": "Other currencies"
+    }
+  },
+  "Common": {
+    "loading": "Loading...",
+    "syncing": "Syncing..."
+  },
+  "AuthError": {
+    "title": "Authentication Error",
+    "subtitle": "Unable to sign you in",
+    "messages": {
+      "verification": "This magic link has expired or already been used. Please request a new one.",
+      "configuration": "Authentication configuration error. Please contact support.",
+      "default": "An authentication error occurred. Please try again."
+    },
+    "actions": {
+      "goToSettings": "Go to Settings"
+    }
+  },
+  "SyncAnnouncement": {
+    "title": "New: Cloud Sync",
+    "body": "Sync your groups across devices.",
+    "actions": {
+      "settings": "Set up in Settings",
+      "dismiss": "Dismiss"
+    }
+  },
+  "SyncErrors": {
+    "toast": {
+      "title": "Sync failed",
+      "saveLocalFailed": "Group saved locally but not synced to cloud",
+      "starFailed": "Failed to sync star status to cloud",
+      "unstarFailed": "Failed to sync unstar status to cloud",
+      "archiveFailed": "Failed to sync archive status to cloud",
+      "unarchiveFailed": "Failed to sync unarchive status to cloud"
+    },
+    "auth": {
+      "required": "You must be logged in to perform this action"
+    },
+    "validation": {
+      "maxGroups": "Maximum 100 groups per request",
+      "invalidParticipant": "Invalid participant for this group",
+      "invalidParticipantForGroup": "Invalid participant for group {groupId}",
+      "tooManyGroups": "Cannot sync more than {max} groups at once"
+    },
+    "notSynced": "Group is not synced"
+  },
+  "Emails": {
+    "MagicLink": {
+      "subject": "Sign in to {host}",
+      "text": "Sign in to {host}\n\nClick the link below to sign in:\n\n{url}\n\nIf you didn't request this email, you can safely ignore it.",
+      "html": {
+        "title": "Sign in to your account",
+        "body": "Click the button below to securely sign in.",
+        "cta": "Sign in",
+        "copyLabel": "Or copy this link:",
+        "footer": "If you didn't request this email, you can safely ignore it."
+      }
     }
   }
   ,

@@ -28,9 +28,16 @@ export function getRecentGroups() {
 
 export function saveRecentGroup(group: RecentGroup) {
   const recentGroups = getRecentGroups()
+  return saveRecentGroups([
+    group,
+    ...recentGroups.filter((rg) => rg.id !== group.id),
+  ])
+}
+
+export function saveRecentGroups(groups: RecentGroup[]) {
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify([group, ...recentGroups.filter((rg) => rg.id !== group.id)]),
+    JSON.stringify(recentGroupsSchema.parse(groups)),
   )
 }
 
@@ -51,20 +58,21 @@ export function getStarredGroups() {
   return parseResult.success ? parseResult.data : []
 }
 
+export function saveStarredGroups(groups: string[]) {
+  return localStorage.setItem(
+    STARRED_GROUPS_STORAGE_KEY,
+    JSON.stringify(z.string().array().parse(groups)),
+  )
+}
+
 export function starGroup(groupId: string) {
   const starredGroups = getStarredGroups()
-  localStorage.setItem(
-    STARRED_GROUPS_STORAGE_KEY,
-    JSON.stringify([...starredGroups, groupId]),
-  )
+  return saveStarredGroups([...starredGroups, groupId])
 }
 
 export function unstarGroup(groupId: string) {
   const starredGroups = getStarredGroups()
-  localStorage.setItem(
-    STARRED_GROUPS_STORAGE_KEY,
-    JSON.stringify(starredGroups.filter((g) => g !== groupId)),
-  )
+  return saveStarredGroups(starredGroups.filter((g) => g !== groupId))
 }
 
 export function getArchivedGroups() {
@@ -76,18 +84,25 @@ export function getArchivedGroups() {
   return parseResult.success ? parseResult.data : []
 }
 
+export function saveArchivedGroups(groups: string[]) {
+  return localStorage.setItem(
+    ARCHIVED_GROUPS_STORAGE_KEY,
+    JSON.stringify(z.string().array().parse(groups)),
+  )
+}
+
 export function archiveGroup(groupId: string) {
   const archivedGroups = getArchivedGroups()
-  localStorage.setItem(
-    ARCHIVED_GROUPS_STORAGE_KEY,
-    JSON.stringify([...archivedGroups, groupId]),
-  )
+  return saveArchivedGroups([...archivedGroups, groupId])
 }
 
 export function unarchiveGroup(groupId: string) {
   const archivedGroups = getArchivedGroups()
-  localStorage.setItem(
-    ARCHIVED_GROUPS_STORAGE_KEY,
-    JSON.stringify(archivedGroups.filter((g) => g !== groupId)),
-  )
+  return saveArchivedGroups(archivedGroups.filter((g) => g !== groupId))
+}
+
+export function clearAllLocalGroupsData() {
+  localStorage.removeItem(STORAGE_KEY)
+  localStorage.removeItem(STARRED_GROUPS_STORAGE_KEY)
+  localStorage.removeItem(ARCHIVED_GROUPS_STORAGE_KEY)
 }
