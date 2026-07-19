@@ -36,8 +36,13 @@ export function AccountInfo() {
     }
 
     const idToken = session?.idToken
+    // Trailing slash matters: the OIDC provider matches
+    // post_logout_redirect_uri by exact string against what's registered
+    // for this app (e.g. k8s-infra/spliit-oidc.tf's
+    // post_logout_redirect_uris = ["https://spliit.cluster.local/"]), and
+    // window.location.origin never has a trailing slash.
     const endSessionUrl = idToken
-      ? await buildEndSessionUrl(idToken, window.location.origin)
+      ? await buildEndSessionUrl(idToken, `${window.location.origin}/`)
       : null
 
     // Clearing the local session, then - if the provider supports
