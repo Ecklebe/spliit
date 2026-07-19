@@ -36,7 +36,7 @@ import { getGroup } from '@/lib/api'
 import { defaultCurrencyList, getCurrency } from '@/lib/currency'
 import { GroupFormValues, groupFormSchema } from '@/lib/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Save, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -402,7 +402,6 @@ export function GroupForm({
             loadingContent={t(group ? 'Settings.saving' : 'Settings.creating')}
             onClick={updateActiveUser}
           >
-            <Save className="w-4 h-4 mr-2" />{' '}
             {t(group ? 'Settings.save' : 'Settings.create')}
           </SubmitButton>
           {!group && (
