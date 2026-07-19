@@ -22,7 +22,16 @@ export function LoginButton() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="-my-3 text-primary">
+        <Button
+          variant="ghost"
+          size="sm"
+          // align-middle: this button's first flex child is an icon (no text
+          // baseline), so its default vertical-align: baseline positions it
+          // ~4px lower than the plain-text Groups/Settings buttons next to it
+          // (whose baseline comes from real text) - align-middle sidesteps
+          // that mismatch entirely.
+          className="-my-3 text-primary align-middle"
+        >
           <LogIn className="w-4 h-4 mr-1" />
           {t('login')}
         </Button>

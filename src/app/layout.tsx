@@ -111,14 +111,14 @@ function Content({
                     <Link href="/groups">{t('Header.groups')}</Link>
                   </Button>
                 </li>
+                <li>
+                  <LocaleSwitcher />
+                </li>
                 {enableLogin && (
                   <li>
                     <HeaderAuthSection />
                   </li>
                 )}
-                <li>
-                  <LocaleSwitcher />
-                </li>
                 <li>
                   <ThemeToggle />
                 </li>
