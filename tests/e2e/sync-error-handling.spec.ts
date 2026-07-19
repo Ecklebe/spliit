@@ -1,12 +1,12 @@
 import { randomId } from '@/lib/api'
 import { expect, test } from '@playwright/test'
-import { signInWithMagicLink } from '../helpers/auth'
+import { signInAsTestUser } from '../helpers/auth'
 import { createGroupViaAPI } from '../helpers/batch-api'
 
 test.describe('Sync Error Handling', () => {
   test('handles network errors gracefully', async ({ page, context }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     const groupId = await createGroupViaAPI(page, `Error Test ${randomId(4)}`, [
       'Alice',
@@ -57,7 +57,7 @@ test.describe('Sync Error Handling', () => {
 
   test('handles server errors with retry', async ({ page, context }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     const groupId = await createGroupViaAPI(page, `Retry Test ${randomId(4)}`, [
       'Alice',
@@ -111,7 +111,7 @@ test.describe('Sync Error Handling', () => {
 
   test('shows appropriate error for invalid group', async ({ page }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     // Try to access a non-existent group
     const response = await page.goto('/groups/invalid-group-id-12345')
@@ -130,7 +130,7 @@ test.describe('Sync Error Handling', () => {
 
   test('handles concurrent sync operations', async ({ page }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     const group1Name = `Concurrent 1 ${randomId(4)}`
     const group2Name = `Concurrent 2 ${randomId(4)}`

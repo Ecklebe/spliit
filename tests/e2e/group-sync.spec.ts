@@ -1,13 +1,13 @@
 import { randomId } from '@/lib/api'
 import { expect, test } from '@playwright/test'
-import { signInWithMagicLink, signOut } from '../helpers/auth'
+import { signInAsTestUser, signOut } from '../helpers/auth'
 import { createGroupViaAPI } from '../helpers/batch-api'
 import { createGroup } from '../helpers'
 
 test.describe('Group Cloud Sync', () => {
   test('sync and unsync group flow', async ({ page }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     // Create a group
     const groupName = `Sync Test ${randomId(4)}`
@@ -40,7 +40,7 @@ test.describe('Group Cloud Sync', () => {
 
   test('auto-sync new groups when preference enabled', async ({ page }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     // Enable auto-sync preference
     await page.goto('/settings')
@@ -84,7 +84,7 @@ test.describe('Group Cloud Sync', () => {
 
     // Sign in (will trigger hydration)
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     // Go to groups page
     await page.goto('/groups')
@@ -101,7 +101,7 @@ test.describe('Group Cloud Sync', () => {
     const context1 = await browser.newContext()
     const page1 = await context1.newPage()
 
-    await signInWithMagicLink(page1, testEmail)
+    await signInAsTestUser(page1, testEmail)
     const groupName = `Star Test ${randomId(4)}`
     const groupId = await createGroupViaAPI(page1, groupName, ['Alice', 'Bob'])
 
@@ -127,7 +127,7 @@ test.describe('Group Cloud Sync', () => {
     const context2 = await browser.newContext()
     const page2 = await context2.newPage()
 
-    await signInWithMagicLink(page2, testEmail)
+    await signInAsTestUser(page2, testEmail)
 
     // Check if group is starred on device 2
     await page2.goto('/groups')
@@ -142,7 +142,7 @@ test.describe('Group Cloud Sync', () => {
 
   test('logout with clear option removes local data', async ({ page }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     // Create a group
     await createGroupViaAPI(page, `Clear Test ${randomId(4)}`, ['Alice', 'Bob'])
@@ -161,7 +161,7 @@ test.describe('Group Cloud Sync', () => {
 
   test('logout without clear keeps local data', async ({ page }) => {
     const testEmail = `test-${randomId(4)}@example.com`
-    await signInWithMagicLink(page, testEmail)
+    await signInAsTestUser(page, testEmail)
 
     // Create a group
     const groupName = `Keep Test ${randomId(4)}`

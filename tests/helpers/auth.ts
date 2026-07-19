@@ -1,104 +1,76 @@
+import { prisma } from '@/lib/prisma'
+import { encode } from '@auth/core/jwt'
 import { expect, Page } from '@playwright/test'
-import { readdir, readFile, rm } from 'fs/promises'
-import path from 'path'
 
 /**
- * Helper to read the most recent email from .mail/ directory
- * Returns the email content
+ * Signs a page in as a fresh test user, bypassing the real OIDC flow
+ * entirely - there's no live IdP to script against in this test
+ * environment (see .env.example's OIDC_PROVIDERS docs). Mints a session
+ * cookie directly with AUTH_SECRET, the same way @auth/core signs one
+ * for a real sign-in (jwt.encode, salted with the session cookie's own
+ * name - see @auth/core/lib/actions/callback/index.js).
+ *
+ * Also seeds the User + SyncProfile rows a real sign-in would create via
+ * the PrismaAdapter (src/lib/auth.ts's extendedAdapter.createUser) - the
+ * sync router's procedures expect a SyncProfile to already exist for the
+ * session's user id.
  */
-export async function readRecentEmail(mailAddress: string): Promise<string> {
-  const mailDir = path.join(process.cwd(), '.mail')
-  const files = await readdir(mailDir)
-
-  // Filter .eml files and sort by name (which includes timestamp)
-  const normalizedEmail = mailAddress.replace(/[^a-zA-Z0-9@.-]/g, '_').toLowerCase()
-  const emlFiles = files
-    .filter((f) => f.endsWith(`${normalizedEmail}.eml`))
-    .sort()
-    .reverse()
-
-  if (emlFiles.length === 0) {
-    throw new Error(`No emails found in .mail/ directory for ${normalizedEmail}`)
-  }
-
-  const latestFile = emlFiles[0]!
-  const content = await readFile(path.join(mailDir, latestFile), 'utf-8')
-  // cleanup
-  rm(path.join(mailDir, latestFile)).catch(() => {
-    console.warn(`Failed to delete email file: ${latestFile}`)
-  })
-  return content
-}
-
-/**
- * Extract magic link URL from email content
- */
-export function extractMagicLinkFromEmail(emailContent: string): string {
-  // Look for URL pattern in the email
-  const urlMatch = emailContent.match(/https?:\/\/[^\s<>"]+/g)
-
-  if (!urlMatch || urlMatch.length === 0) {
-    throw new Error('No URL found in email content')
-  }
-
-  // Find the callback URL (contains callbackUrl or token)
-  const magicLink = urlMatch.find(
-    (url) =>
-      url.includes('callback') ||
-      url.includes('token') ||
-      url.includes('/api/auth'),
-  )
-
-  if (!magicLink) {
-    throw new Error('No magic link found in email')
-  }
-
-  return magicLink
-}
-
-/**
- * Sign in using magic link flow
- * 1. Navigate to /settings
- * 2. Enter email
- * 3. Click send magic link
- * 4. Read .mail/ for link
- * 5. Navigate to link
- * 6. Verify signed in
- */
-export async function signInWithMagicLink(
+export async function signInAsTestUser(
   page: Page,
   email: string,
-): Promise<{usedMagicLink: string}> {
-  await page.goto('/settings')
+): Promise<{ userId: string }> {
+  const secret = process.env.AUTH_SECRET
+  if (!secret) {
+    throw new Error(
+      'AUTH_SECRET must be set in the test environment to mint session cookies (see .env.example)',
+    )
+  }
 
-  // Enter email
-  const emailInput = page.getByRole('textbox', { name: 'Email' })
-  await expect(emailInput).toBeVisible()
-  await emailInput.fill(email)
+  // Upsert, not create: tests that sign in with the same email on a
+  // second "device" (a fresh browser context) expect the same identity
+  // and synced state, not a brand new user.
+  const user = await prisma.user.upsert({
+    where: { email },
+    create: { email, name: email.split('@')[0] },
+    update: {},
+  })
+  await prisma.syncProfile.upsert({
+    where: { userId: user.id },
+    create: { userId: user.id },
+    update: {},
+  })
 
-  // Click send magic link
-  const sendButton = page.getByRole('button', { name: /send magic link/i })
-  await sendButton.click()
+  await page.goto('/')
+  const baseUrl = new URL(page.url())
+  const secure = baseUrl.protocol === 'https:'
+  const cookieName = secure
+    ? '__Secure-authjs.session-token'
+    : 'authjs.session-token'
 
-  // Wait for confirmation message
-  await expect(page.getByText(/check your email/i)).toBeVisible()
+  const token = await encode({
+    secret,
+    salt: cookieName,
+    token: {
+      sub: user.id,
+      email: user.email,
+      roles: [],
+    },
+  })
 
-  // Wait a bit for email to be written
-  await page.waitForTimeout(1000)
+  await page.context().addCookies([
+    {
+      name: cookieName,
+      value: token,
+      domain: baseUrl.hostname,
+      path: '/',
+      httpOnly: true,
+      secure,
+      sameSite: 'Lax',
+    },
+  ])
+  await page.reload()
 
-  // Read email and extract link
-  const emailContent = await readRecentEmail(email)
-  const magicLink = extractMagicLinkFromEmail(emailContent)
-
-  // Navigate to magic link and wait for auth to complete
-  const response = await page.goto(magicLink, { waitUntil: 'networkidle' })
-
-  // NextAuth will redirect to the callback URL after successful authentication
-  // Wait for either redirect or load to complete
-  await expect(page.getByText('Signed in as')).toBeVisible()
-  // Verify signed in by checking for sign out button
-  await expect(page.getByRole('button', { name: 'Sign out' })).toBeVisible()
-  return { usedMagicLink: magicLink }
+  return { userId: user.id }
 }
 
 /**
