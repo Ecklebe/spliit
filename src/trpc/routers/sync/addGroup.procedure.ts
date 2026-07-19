@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma'
 import { TRPCError } from '@trpc/server'
-import { getTranslations } from 'next-intl/server'
 import { protectedProcedure } from './protected'
 import { addGroupInputSchema } from './schemas'
 import { hashGroupId } from './utils'
@@ -10,7 +9,6 @@ export const addGroupProcedure = protectedProcedure
   .mutation(async ({ ctx, input }) => {
     const { user } = ctx
     const { groupId, isStarred, isArchived, activeParticipantId } = input
-    const t = await getTranslations('SyncErrors')
 
     return await prisma.$transaction(async (tx) => {
       // Validate activeParticipantId belongs to the group
@@ -21,7 +19,7 @@ export const addGroupProcedure = protectedProcedure
         if (!participant) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
-            message: t('validation.invalidParticipant'),
+            message: 'Invalid participant for this group',
           })
         }
       }
