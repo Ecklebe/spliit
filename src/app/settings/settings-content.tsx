@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Loader2, Settings2 } from 'lucide-react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@zitadel/next-auth/react'
 import { useTranslations } from 'next-intl'
 import {
   AccountInfo,

@@ -1,4 +1,4 @@
-import { getServerSession } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import { baseProcedure } from '@/trpc/init'
 import { TRPCError } from '@trpc/server'
 
@@ -6,8 +6,8 @@ import { TRPCError } from '@trpc/server'
  * Protected procedure that requires authentication
  * Throws UNAUTHORIZED error if user is not logged in
  */
-export const protectedProcedure = baseProcedure.use(async ({ next }) => {
-  const session = await getServerSession()
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  const session = await auth(ctx.req)
 
   if (!session?.user?.email || !session?.user?.id) {
     // Not translated: server-side thrown error messages aren't translated

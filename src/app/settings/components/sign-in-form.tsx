@@ -1,92 +1,61 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useMutation } from '@tanstack/react-query'
-import { Loader2, Mail } from 'lucide-react'
-import { signIn } from 'next-auth/react'
+import { useQuery } from '@tanstack/react-query'
+import {
+  getProviders,
+  signIn,
+  type ClientSafeProvider,
+} from '@zitadel/next-auth/react'
+import { KeyRound, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 export function SignInForm() {
-  const [email, setEmail] = useState('')
   const t = useTranslations('Settings.SignIn')
+  const [signingInId, setSigningInId] = useState<string | null>(null)
 
-  const signInMutation = useMutation({
-    mutationFn: async (email: string) => {
-      const result = await signIn('email', { email, redirect: false })
-      if (result?.error) {
-        throw new Error(result.error)
-      }
-      return result
-    },
-    onError: (error) => {
-      console.error('Sign in error:', error)
-    },
+  // getProviders() only returns public provider metadata (id/name/type/
+  // signinUrl/callbackUrl) via a server endpoint - never client_secret,
+  // which stays server-side in src/lib/env.ts/auth.ts.
+  const { data: providers, isLoading } = useQuery({
+    queryKey: ['auth-providers'],
+    queryFn: getProviders,
   })
 
-  const handleSignIn = () => {
-    if (!email) return
-    signInMutation.mutate(email)
+  const providerList: ClientSafeProvider[] = providers
+    ? Object.values(providers)
+    : []
+
+  if (isLoading) {
+    return <Loader2 className="w-4 h-4 animate-spin" />
   }
 
-  if (signInMutation.isSuccess) {
-    return (
-      <div className="space-y-4">
-        <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-sm font-medium text-green-900 dark:text-green-100">
-            {t('success.title')}
-          </p>
-          <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-            {t('success.body', { email })}
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          onClick={() => {
-            signInMutation.reset()
-            setEmail('')
-          }}
-        >
-          {t('actions.tryDifferentEmail')}
-        </Button>
-      </div>
-    )
+  if (providerList.length === 0) {
+    return <p className="text-sm text-muted-foreground">{t('none')}</p>
   }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">{t('email.label')}</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder={t('email.placeholder')}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleSignIn()
+    <div className="space-y-2">
+      {providerList.map((provider) => (
+        <Button
+          key={provider.id}
+          variant="outline"
+          className="w-full sm:w-auto"
+          disabled={signingInId !== null}
+          onClick={() => {
+            setSigningInId(provider.id)
+            signIn(provider.id)
           }}
-        />
-      </div>
-      <Button
-        onClick={handleSignIn}
-        disabled={!email || signInMutation.isPending}
-        className="w-full sm:w-auto"
-      >
-        {signInMutation.isPending ? (
-          <>
+        >
+          {signingInId === provider.id ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            {t('actions.sending')}
-          </>
-        ) : (
-          <>
-            <Mail className="w-4 h-4 mr-2" />
-            {t('actions.send')}
-          </>
-        )}
-      </Button>
+          ) : (
+            <KeyRound className="w-4 h-4 mr-2" />
+          )}
+          {t('signInWith', { provider: provider.name })}
+        </Button>
+      ))}
     </div>
   )
 }

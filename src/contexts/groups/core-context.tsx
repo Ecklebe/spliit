@@ -4,7 +4,7 @@ import { clearAllLocalGroupsData } from '@/app/groups/recent-groups-helpers'
 import { useToast } from '@/components/ui/use-toast'
 import { trpc } from '@/trpc/client'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@zitadel/next-auth/react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import {

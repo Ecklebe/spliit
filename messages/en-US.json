@@ -473,19 +473,8 @@
       }
     },
     "SignIn": {
-      "success": {
-        "title": "Check your email for the magic link",
-        "body": "We sent a sign-in link to {email}"
-      },
-      "actions": {
-        "tryDifferentEmail": "Try different email",
-        "sending": "Sending...",
-        "send": "Send magic link"
-      },
-      "email": {
-        "label": "Email",
-        "placeholder": "your@email.com"
-      }
+      "signInWith": "Sign in with {provider}",
+      "none": "No sign-in providers are configured for this instance."
     },
     "Account": {
       "signedInAs": "Signed in as",

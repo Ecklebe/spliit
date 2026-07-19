@@ -7,7 +7,12 @@ import {
 import { appRouter } from '@/trpc/routers/_app'
 import { RecurrenceRule, SplitMode } from '@prisma/client'
 
-const caller = appRouter.createCaller({})
+// No auth cookie/header set: exercises the anonymous/unauthenticated path,
+// which is what every test in this file actually needs (none of them touch
+// the sync router's protectedProcedure).
+const caller = appRouter.createCaller({
+  req: new Request('http://localhost/api/trpc'),
+})
 const createdGroupIds = new Set<string>()
 
 const groupFormValues = (name: string): GroupFormValues => ({

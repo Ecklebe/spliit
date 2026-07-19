@@ -196,14 +196,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
 // Sync-specific models
 model SyncProfile {
   id              String            @id @default(cuid())

@@ -3,7 +3,7 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Cloud } from 'lucide-react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@zitadel/next-auth/react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'

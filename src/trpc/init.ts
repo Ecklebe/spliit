@@ -12,23 +12,30 @@ superjson.registerCustom<Prisma.Decimal, string>(
   'decimal.js',
 )
 
-export const createTRPCContext = cache(async () => {
+export const createTRPCContext = cache(async (opts: { req: Request }) => {
   /**
    * @see: https://trpc.io/docs/server/context
+   *
+   * Exposes the raw Request so protectedProcedure (sync router) can call
+   * @zitadel/next-auth's auth(req) - unlike NextAuth v5's own auth(), this
+   * package's session lookup takes the request explicitly rather than
+   * reading it implicitly via Next.js's async-local-storage headers().
    */
-  return {}
+  return { req: opts.req }
 })
 
 // Avoid exporting the entire t-object
 // since it's not very descriptive.
 // For instance, the use of a t variable
 // is common in i18n libraries.
-const t = initTRPC.create({
-  /**
-   * @see https://trpc.io/docs/server/data-transformers
-   */
-  transformer: superjson,
-})
+const t = initTRPC
+  .context<Awaited<ReturnType<typeof createTRPCContext>>>()
+  .create({
+    /**
+     * @see https://trpc.io/docs/server/data-transformers
+     */
+    transformer: superjson,
+  })
 
 // Base router and procedure helpers
 export const createTRPCRouter = t.router

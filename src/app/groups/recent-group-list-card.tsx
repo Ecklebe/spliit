@@ -31,7 +31,7 @@ import {
   Star,
   Users,
 } from 'lucide-react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@zitadel/next-auth/react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'

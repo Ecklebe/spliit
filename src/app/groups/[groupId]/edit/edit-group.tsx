@@ -2,7 +2,7 @@
 
 import { GroupForm } from '@/components/group-form'
 import { trpc } from '@/trpc/client'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@zitadel/next-auth/react'
 import { useCurrentGroup } from '../current-group-context'
 
 export const EditGroup = () => {

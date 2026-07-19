@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useGroupActions } from '@/contexts'
 import { LogOut } from 'lucide-react'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut, useSession } from '@zitadel/next-auth/react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -30,7 +30,9 @@ export function AccountInfo() {
     if (shouldClearData) {
       clearLocalData()
     }
-    await signOut({ redirect: false })
+    // @zitadel/next-auth's signOut doesn't support a redirect:false escape
+    // hatch (its v4 next-auth/react equivalent did) - it always navigates.
+    await signOut()
     setShowLogoutDialog(false)
     router.refresh()
   }

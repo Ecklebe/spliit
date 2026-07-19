@@ -1,6 +1,6 @@
 'use client'
 
-import { SessionProvider } from 'next-auth/react'
+import { SessionProvider } from '@zitadel/next-auth/react'
 
 /**
  * NextAuth SessionProvider wrapper
