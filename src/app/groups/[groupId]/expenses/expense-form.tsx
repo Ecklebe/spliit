@@ -1,6 +1,7 @@
 import { CategorySelector } from '@/components/category-selector'
 import { CurrencySelector } from '@/components/currency-selector'
 import { ExpenseDocumentsInput } from '@/components/expense-documents-input'
+import { ExpenseLocationInput } from '@/components/expense-location-input'
 import { SubmitButton } from '@/components/submit-button'
 import { Button } from '@/components/ui/button'
 import {
@@ -57,13 +58,24 @@ import { RecurrenceRule } from '@prisma/client'
 import { ChevronRight, Save } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { DeletePopup } from '../../../../components/delete-popup'
 import { extractCategoryFromTitle } from '../../../../components/expense-form-actions'
 import { Textarea } from '../../../../components/ui/textarea'
+
+function getLocationFromSearchParams(
+  searchParams: ReadonlyURLSearchParams,
+): ExpenseFormValues['location'] {
+  return searchParams.get('latitude') && searchParams.get('longitude')
+    ? {
+        latitude: Number(searchParams.get('latitude')),
+        longitude: Number(searchParams.get('longitude')),
+      }
+    : null
+}
 
 const getDefaultSplittingOptions = (
   group: NonNullable<AppRouterOutput['groups']['get']['group']>,
@@ -198,6 +210,7 @@ export function ExpenseForm({
           documents: expense.documents,
           notes: expense.notes ?? '',
           recurrenceRule: expense.recurrenceRule ?? undefined,
+          location: expense.location,
         }
       : searchParams.get('reimbursement')
       ? {
@@ -228,6 +241,7 @@ export function ExpenseForm({
           documents: [],
           notes: '',
           recurrenceRule: RecurrenceRule.NONE,
+          location: getLocationFromSearchParams(searchParams),
         }
       : {
           title: searchParams.get('title') ?? '',
@@ -259,6 +273,7 @@ export function ExpenseForm({
             : [],
           notes: '',
           recurrenceRule: RecurrenceRule.NONE,
+          location: getLocationFromSearchParams(searchParams),
         },
   })
   const [isCategoryLoading, setCategoryLoading] = useState(false)
@@ -1254,6 +1269,29 @@ export function ExpenseForm({
                 </div>
               </CollapsibleContent>
             </Collapsible>
+          </CardContent>
+        </Card>
+
+        <Card className="mt-4">
+          <CardHeader>
+            <CardTitle className="flex justify-between">
+              <span>{t('location')}</span>
+            </CardTitle>
+            <CardDescription>{t('locationDescription')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <ExpenseLocationInput
+                    location={field.value}
+                    updateLocation={field.onChange}
+                  />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 

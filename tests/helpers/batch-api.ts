@@ -17,6 +17,7 @@ interface ExpenseFormValues {
   saveDefaultSplittingOptions: boolean
   documents?: Array<{ id: string; url: string; width: number; height: number }>
   notes?: string
+  location: { latitude: number; longitude: number } | null
 }
 
 interface GroupFormValues {
@@ -190,6 +191,7 @@ export async function createExpensesViaAPI(
       recurrenceRule: expense.recurrenceRule || 'NONE',
       saveDefaultSplittingOptions: true,
       notes: expense.notes,
+      location: null,
     }
 
     const result = await trpc.groups.expenses.create.mutate({

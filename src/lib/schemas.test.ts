@@ -18,6 +18,7 @@ describe('expenseFormSchema', () => {
       documents: [],
       notes: undefined,
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(result.success).toBe(true)
@@ -40,6 +41,7 @@ describe('expenseFormSchema', () => {
       documents: [],
       notes: undefined,
       recurrenceRule: 'MONTHLY',
+      location: null,
     })
 
     expect(result.success).toBe(true)
@@ -58,6 +60,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(result.success).toBe(false)
@@ -76,6 +79,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(result.success).toBe(false)
@@ -120,6 +124,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(resultLess.success).toBe(false)
@@ -140,6 +145,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(resultMore.success).toBe(false)
@@ -160,6 +166,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(resultValid.success).toBe(true)
@@ -182,6 +189,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(resultLess.success).toBe(false)
@@ -202,6 +210,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(resultMore.success).toBe(false)
@@ -222,6 +231,7 @@ describe('expenseFormSchema', () => {
       isReimbursement: false,
       documents: [],
       recurrenceRule: 'NONE',
+      location: null,
     })
 
     expect(resultValid.success).toBe(true)

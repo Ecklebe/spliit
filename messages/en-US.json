@@ -281,6 +281,8 @@
       "cancel": "Cancel"
     },
     "attachDocuments": "Attach documents",
+    "location": "Location",
+    "locationDescription": "Where was this made?",
     "create": "Create",
     "creating": "Creating…",
     "save": "Save",

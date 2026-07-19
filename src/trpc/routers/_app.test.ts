@@ -38,6 +38,7 @@ const expenseFormValues = (
   documents: [],
   notes: '',
   recurrenceRule: RecurrenceRule.NONE,
+  location: null,
   ...overrides,
 })
 

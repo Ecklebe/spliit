@@ -53,6 +53,7 @@ const expenseValues = (
   documents: [],
   notes: '',
   recurrenceRule: RecurrenceRule.NONE,
+  location: null,
   ...overrides,
 })
 

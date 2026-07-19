@@ -142,6 +142,12 @@ export const expenseFormSchema = z
         Object.values(RecurrenceRule) as any,
       )
       .default('NONE'),
+    location: z
+      .object({
+        latitude: z.number().refine((val) => val > -90 && val < 90),
+        longitude: z.number().refine((val) => val > -180 && val < 180),
+      })
+      .nullable(),
   })
   .superRefine((expense, ctx) => {
     switch (expense.splitMode) {

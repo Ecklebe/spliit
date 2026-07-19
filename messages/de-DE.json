@@ -252,6 +252,8 @@
       "cancel": "Abbrechen"
     },
     "attachDocuments": "Dokument hinzufügen",
+    "location": "Standort",
+    "locationDescription": "Wo ist das entstanden?",
     "create": "Erstellen",
     "creating": "Erstellt…",
     "save": "Speichern",
