@@ -12,16 +12,20 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { useGroupActions } from '@/contexts'
+import type { Session } from '@/lib/auth'
+import { buildEndSessionUrl, clearLocalSession } from '@/lib/oidc-logout'
 import { LogOut } from 'lucide-react'
-import { signOut, useSession } from '@zitadel/next-auth/react'
+import { useSession } from '@zitadel/next-auth/react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export function AccountInfo() {
-  const { data: session } = useSession()
+  const { data: sessionData } = useSession()
+  // Cast: see the matching cast/comment in settings-content.tsx and
+  // getServerSession (src/lib/auth.ts) - useSession()'s declared Session
+  // type doesn't reach our roles/idToken augmentation.
+  const session = sessionData as unknown as Session | null
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
-  const router = useRouter()
   const { clearLocalData } = useGroupActions()
   const t = useTranslations('Settings.Account')
   const groupFormT = useTranslations('GroupForm.Settings')
@@ -30,11 +34,19 @@ export function AccountInfo() {
     if (shouldClearData) {
       clearLocalData()
     }
-    // @zitadel/next-auth's signOut doesn't support a redirect:false escape
-    // hatch (its v4 next-auth/react equivalent did) - it always navigates.
-    await signOut()
+
+    const idToken = session?.idToken
+    const endSessionUrl = idToken
+      ? await buildEndSessionUrl(idToken, window.location.origin)
+      : null
+
+    // Clearing the local session, then - if the provider supports
+    // RP-initiated logout - also ending its SSO session, so a subsequent
+    // sign-in actually prompts for credentials instead of silently
+    // re-authenticating via the still-live provider session.
+    await clearLocalSession()
     setShowLogoutDialog(false)
-    router.refresh()
+    window.location.href = endSessionUrl ?? window.location.pathname
   }
 
   return (

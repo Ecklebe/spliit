@@ -61,12 +61,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: '/auth/error',
   },
   callbacks: {
-    async jwt({ token, profile }) {
+    async jwt({ token, account, profile }) {
       if (profile) {
         const roleClaim = profile['urn:zitadel:iam:org:project:roles'] as
           | Record<string, unknown>
           | undefined
         token.roles = roleClaim ? Object.keys(roleClaim) : []
+      }
+      // account is only present on the initial sign-in exchange (same as
+      // profile above) - id_token is needed for RP-initiated logout (see
+      // account-info.tsx), since without it we can only clear our own local
+      // session, leaving the provider's own SSO session alive so the next
+      // sign-in silently re-authenticates with no credential prompt.
+      if (account?.id_token) {
+        token.idToken = account.id_token as string
       }
       return token
     },
@@ -81,6 +89,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         typedSession.user.id = token.sub!
         typedSession.user.roles = (token.roles as string[] | undefined) ?? []
       }
+      typedSession.idToken = token.idToken as string | undefined
       return typedSession
     },
   },
