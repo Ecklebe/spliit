@@ -663,19 +663,6 @@
       "tooManyGroups": "Cannot sync more than {max} groups at once"
     },
     "notSynced": "Group is not synced"
-  },
-  "Emails": {
-    "MagicLink": {
-      "subject": "Sign in to {host}",
-      "text": "Sign in to {host}\n\nClick the link below to sign in:\n\n{url}\n\nIf you didn't request this email, you can safely ignore it.",
-      "html": {
-        "title": "Sign in to your account",
-        "body": "Click the button below to securely sign in.",
-        "cta": "Sign in",
-        "copyLabel": "Or copy this link:",
-        "footer": "If you didn't request this email, you can safely ignore it."
-      }
-    }
   }
   ,
   "FileImport": {
@@ -719,5 +706,16 @@
     "fileEmpty": "The uploaded file was empty.",
     "invalidAmount": "Invalid amount in one or more rows.",
     "invalidDate": "Invalid expense date in one or more rows."
+  },
+  "Admin": {
+    "title": "Admin",
+    "description": "Read-only overview of this instance.",
+    "stats": {
+      "groups": "Groups",
+      "participants": "Participants",
+      "expenses": "Expenses",
+      "signedInUsers": "Signed-in Users",
+      "syncedGroups": "Synced Groups"
+    }
   }
 }

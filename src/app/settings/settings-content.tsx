@@ -7,9 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import type { Session } from '@/lib/auth'
 import { Loader2, Settings2 } from 'lucide-react'
 import { useSession } from '@zitadel/next-auth/react'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 import {
   AccountInfo,
   SignInForm,
@@ -19,9 +22,15 @@ import {
 } from './components'
 
 export function SettingsContent() {
-  const { data: session, status } = useSession()
+  const { data: sessionData, status } = useSession()
+  // Cast: useSession()'s declared Session type resolves against
+  // @zitadel/next-auth's own nested @auth/core copy, which our roles
+  // augmentation (targeting the top-level copy) doesn't reach - see the
+  // matching cast/comment in getServerSession (src/lib/auth.ts).
+  const session = sessionData as unknown as Session | null
   const t = useTranslations('Settings')
   const commonT = useTranslations('Common')
+  const adminT = useTranslations('Admin')
 
   if (status === 'loading') {
     return (
@@ -38,7 +47,12 @@ export function SettingsContent() {
     <div className="container max-w-4xl py-8 space-y-6">
       <div className="flex items-center gap-3">
         <Settings2 className="w-8 h-8" />
-        <h1 className="text-3xl font-bold">{t('title')}</h1>
+        <h1 className="text-3xl font-bold flex-1">{t('title')}</h1>
+        {session?.user?.roles?.includes('admin') && (
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/admin">{adminT('title')}</Link>
+          </Button>
+        )}
       </div>
 
       <Card>
