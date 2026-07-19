@@ -20,15 +20,10 @@ export default async function AdminPage() {
   if (env.OIDC_PROVIDERS.length === 0) notFound()
 
   const session = await getServerSession()
-  // TEMPORARY diagnostic - remove once the role-gating issue is confirmed
-  // fixed. Logs only presence/shape, never the raw session/token.
-  console.log('[admin-debug]', {
-    hasSession: !!session,
-    userId: session?.user?.id,
-    email: session?.user?.email,
-    roles: session?.user?.roles,
-  })
-  if (!session?.user?.roles?.includes('admin')) notFound()
+  // Role key is "admins" (plural) - matches the Zitadel project role key
+  // defined in k8s-infra/spliit-oidc.tf, same convention as Jenkins/
+  // Forgejo/Backstage's "admins"/"dev" roles elsewhere in this cluster.
+  if (!session?.user?.roles?.includes('admins')) notFound()
 
   const t = await getTranslations('Admin')
 

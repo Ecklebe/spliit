@@ -48,7 +48,7 @@ export function SettingsContent({ enableAdmin }: { enableAdmin: boolean }) {
       <div className="flex items-center gap-3">
         <Settings2 className="w-8 h-8" />
         <h1 className="text-3xl font-bold flex-1">{t('title')}</h1>
-        {enableAdmin && session?.user?.roles?.includes('admin') && (
+        {enableAdmin && session?.user?.roles?.includes('admins') && (
           <Button variant="outline" size="sm" asChild>
             <Link href="/admin">{adminT('title')}</Link>
           </Button>
