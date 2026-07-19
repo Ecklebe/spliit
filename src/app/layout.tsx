@@ -80,7 +80,7 @@ function Content({ children }: { children: React.ReactNode }) {
           <h1>
             <Image
               src="/logo-with-text.png"
-              className="m-1 h-auto w-auto"
+              className="m-1"
               width={(35 * 522) / 180}
               height={35}
               alt="Spliit"
@@ -117,7 +117,7 @@ function Content({ children }: { children: React.ReactNode }) {
             <Link className="flex items-center gap-2" href="/">
               <Image
                 src="/logo-with-text.png"
-                className="m-1 h-auto w-auto"
+                className="m-1"
                 width={(35 * 522) / 180}
                 height={35}
                 alt="Spliit"
