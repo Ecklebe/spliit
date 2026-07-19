@@ -38,6 +38,12 @@ function buildProviders() {
       issuer,
       clientId,
       clientSecret,
+      // Request a `groups` scope/claim on top of the OIDC defaults -
+      // Authelia (and a number of other generic OIDC providers) expose
+      // group membership this way. Zitadel has its own dedicated nested
+      // roles claim instead (handled separately below), so this only
+      // matters for non-Zitadel providers.
+      authorization: { params: { scope: 'openid profile email groups' } },
     } satisfies OIDCConfig<Record<string, unknown>>
   })
 }
@@ -63,10 +69,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, account, profile }) {
       if (profile) {
-        const roleClaim = profile['urn:zitadel:iam:org:project:roles'] as
-          | Record<string, unknown>
-          | undefined
-        token.roles = roleClaim ? Object.keys(roleClaim) : []
+        // Zitadel asserts a nested role -> {org_id: org_name} object under
+        // this claim key; most other OIDC providers (Authelia included)
+        // expose group membership as a flat `groups` array claim instead -
+        // support both rather than assuming Zitadel's shape everywhere.
+        const zitadelRoleClaim = profile[
+          'urn:zitadel:iam:org:project:roles'
+        ] as Record<string, unknown> | undefined
+        const flatGroups = profile.groups
+        token.roles = zitadelRoleClaim
+          ? Object.keys(zitadelRoleClaim)
+          : Array.isArray(flatGroups)
+            ? (flatGroups as string[])
+            : []
       }
       // account is only present on the initial sign-in exchange (same as
       // profile above) - id_token is needed for RP-initiated logout (see
