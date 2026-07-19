@@ -13,15 +13,19 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Plus } from 'lucide-react'
-import { Metadata } from 'next'
 import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { useCurrentGroup } from '../current-group-context'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Expenses',
+export async function generateMetadata() {
+  const t = await getTranslations('Expenses')
+
+  return {
+    title: t('title'),
+  };
 }
 
 export default function GroupExpensesPageClient({

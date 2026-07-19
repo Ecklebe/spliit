@@ -6,11 +6,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Metadata } from 'next'
 import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Activity',
+export async function generateMetadata() {
+  const t = await getTranslations('Activity')
+
+  return {
+    title: t('title'),
+  };
 }
 
 export function ActivityPageClient() {
