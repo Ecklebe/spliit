@@ -32,6 +32,7 @@ model Participant {
   groupId         String
   expensesPaidBy  Expense[]
   expensesPaidFor ExpensePaidFor[]
+  expenseComments ExpenseComment[]
 }
 
 model Category {
@@ -60,6 +61,7 @@ model Expense {
   splitMode        SplitMode         @default(EVENLY)
   createdAt        DateTime          @default(now())
   documents        ExpenseDocument[]
+  comments         ExpenseComment[]
   notes            String?
   location         Point?
 
@@ -73,6 +75,16 @@ model Point {
   latitude  Float
   longitude Float
   Expense   Expense? @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model ExpenseComment {
+  id            String      @id
+  comment       String
+  time          DateTime    @default(now())
+  Expense       Expense?    @relation(fields: [expenseId], references: [id])
+  expenseId     String?
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
 }
 
 model ExpenseDocument {
