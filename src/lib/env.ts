@@ -49,6 +49,14 @@ const envSchema = z
     // OIDC providers, registered by id via OIDC_PROVIDERS - see oidcProviders
     // below for how each id's companion vars get assembled.
     AUTH_SECRET: z.string().optional(),
+    // Strongly recommended whenever OIDC_PROVIDERS is set and the app runs
+    // behind a reverse proxy - see the route handler
+    // (api/auth/[...nextauth]/route.ts) for why: @auth/core's own
+    // header-based origin detection doesn't cover the code path that builds
+    // OAuth redirect_uris, so without this every provider's redirect_uri
+    // comes out as whatever Next.js's own local bind address is, not the
+    // real external host.
+    AUTH_URL: z.string().url().optional(),
     OIDC_PROVIDERS: z
       .string()
       .optional()

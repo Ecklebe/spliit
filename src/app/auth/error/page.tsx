@@ -21,8 +21,6 @@ function AuthErrorContent() {
 
   const getErrorMessage = () => {
     switch (error) {
-      case 'Verification':
-        return t('messages.verification')
       case 'Configuration':
         return t('messages.configuration')
       default:

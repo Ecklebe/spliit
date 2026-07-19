@@ -3,7 +3,6 @@
 import { AddGroupByUrlButton } from '@/app/groups/add-group-by-url-button'
 import { RecentGroups } from '@/app/groups/recent-groups-helpers'
 import { FileImportModal } from '@/components/file-import-modal'
-import { SyncFeatureAnnouncement } from '@/components/sync-feature-announcement'
 import { SyncIndicator } from '@/components/sync-indicator'
 import { Button } from '@/components/ui/button'
 import {
@@ -163,8 +162,6 @@ function RecentGroupList_({
 
   return (
     <GroupsPage isRefetching={isRefetching}>
-      {enableLogin && <SyncFeatureAnnouncement />}
-
       {starredGroupInfo.length > 0 && (
         <>
           <h2 className="mb-2">{t('starred')}</h2>

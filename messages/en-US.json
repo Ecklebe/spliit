@@ -9,7 +9,8 @@
   },
   "Header": {
     "groups": "Groups",
-    "settings": "Settings"
+    "settings": "Settings",
+    "login": "Login"
   },
   "Footer": {
     "madeIn": "Made in Montréal, Québec 🇨🇦",
@@ -628,20 +629,11 @@
     "title": "Authentication Error",
     "subtitle": "Unable to sign you in",
     "messages": {
-      "verification": "This magic link has expired or already been used. Please request a new one.",
       "configuration": "Authentication configuration error. Please contact support.",
       "default": "An authentication error occurred. Please try again."
     },
     "actions": {
       "goToSettings": "Go to Settings"
-    }
-  },
-  "SyncAnnouncement": {
-    "title": "New: Cloud Sync",
-    "body": "Sync your groups across devices.",
-    "actions": {
-      "settings": "Set up in Settings",
-      "dismiss": "Dismiss"
     }
   },
   "SyncErrors": {

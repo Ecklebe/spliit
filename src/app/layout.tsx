@@ -1,5 +1,6 @@
 import { ApplePwaSplash } from '@/app/apple-pwa-splash'
 import { AuthProvider } from '@/components/auth-provider'
+import { HeaderAuthSection } from '@/components/header-auth-section'
 import { LocaleSwitcher } from '@/components/locale-switcher'
 import { ProgressBar } from '@/components/progress-bar'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -112,14 +113,7 @@ function Content({
                 </li>
                 {enableLogin && (
                   <li>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                      className="-my-3 text-primary"
-                    >
-                      <Link href="/settings">{t('Header.settings')}</Link>
-                    </Button>
+                    <HeaderAuthSection />
                   </li>
                 )}
                 <li>
