@@ -9,10 +9,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import OpenAI from 'openai'
 import { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/index.mjs'
 
-const openai = new OpenAI({
-  apiKey: env.OPENAI_API_KEY,
-  baseURL: env.OPENAI_BASE_URL,
-})
+let openai: OpenAI
 
 const s3 = getS3Client()
 
@@ -39,6 +36,13 @@ export async function extractExpenseInformationFromImage(id: string) {
   'use server'
   if (!env.NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT)
     throw new Error('Receipt extraction is not enabled')
+
+  if (!openai) {
+    openai = new OpenAI({
+      apiKey: env.OPENAI_API_KEY,
+      baseURL: env.OPENAI_BASE_URL,
+    })
+  }
 
   const categories = await getCategories()
 

@@ -367,7 +367,7 @@ export function GroupForm({
                       }}
                       defaultValue={activeUser}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="active-user-selector">
                         <SelectValue
                           placeholder={t(
                             'Settings.ActiveUserField.placeholder',
