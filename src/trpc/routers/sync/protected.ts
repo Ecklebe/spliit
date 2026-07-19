@@ -1,4 +1,5 @@
 import { auth } from '@/lib/auth'
+import { env } from '@/lib/env'
 import { baseProcedure } from '@/trpc/init'
 import { TRPCError } from '@trpc/server'
 
@@ -7,6 +8,13 @@ import { TRPCError } from '@trpc/server'
  * Throws UNAUTHORIZED error if user is not logged in
  */
 export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  // Fully hidden, not just unlinked, when no OIDC provider is configured -
+  // see featureFlags.ts's enableLogin. NOT_FOUND rather than UNAUTHORIZED
+  // so a disabled instance gives no signal that this feature exists at all.
+  if (env.OIDC_PROVIDERS.length === 0) {
+    throw new TRPCError({ code: 'NOT_FOUND' })
+  }
+
   const session = await auth(ctx.req)
 
   if (!session?.user?.email || !session?.user?.id) {

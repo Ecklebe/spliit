@@ -68,7 +68,7 @@ function sortGroups({
   }
 }
 
-export function RecentGroupList() {
+export function RecentGroupList({ enableLogin }: { enableLogin: boolean }) {
   const {
     recentGroups,
     starredGroupIds,
@@ -85,6 +85,7 @@ export function RecentGroupList() {
       starredGroups={starredGroupIds}
       archivedGroups={archivedGroupIds}
       isRefetching={isRefetching}
+      enableLogin={enableLogin}
     />
   )
 }
@@ -94,11 +95,13 @@ function RecentGroupList_({
   starredGroups,
   archivedGroups,
   isRefetching,
+  enableLogin,
 }: {
   groups: RecentGroups
   starredGroups: Set<string>
   archivedGroups: Set<string>
   isRefetching: boolean
+  enableLogin: boolean
 }) {
   const t = useTranslations('Groups')
   const { data: session } = useSession()
@@ -122,7 +125,7 @@ function RecentGroupList_({
       <GroupsPage isRefetching={isRefetching}>
         <div className="text-sm space-y-2">
           <p>{t('NoRecent.description')}</p>
-          {!session && (
+          {enableLogin && !session && (
             <p>
               <Button variant="link" asChild className="-m-4">
                 <Link href="/settings" className="text-primary hover:underline">
@@ -160,7 +163,7 @@ function RecentGroupList_({
 
   return (
     <GroupsPage isRefetching={isRefetching}>
-      <SyncFeatureAnnouncement />
+      {enableLogin && <SyncFeatureAnnouncement />}
 
       {starredGroupInfo.length > 0 && (
         <>

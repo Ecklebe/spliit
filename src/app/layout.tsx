@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
 import { GroupsProvider } from '@/contexts'
 import { env } from '@/lib/env'
+import { getRuntimeFeatureFlags } from '@/lib/featureFlags'
 import { TRPCProvider } from '@/trpc/client'
 import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider, useTranslations } from 'next-intl'
@@ -70,7 +71,13 @@ export const viewport: Viewport = {
   themeColor: '#047857',
 }
 
-function Content({ children }: { children: React.ReactNode }) {
+function Content({
+  children,
+  enableLogin,
+}: {
+  children: React.ReactNode
+  enableLogin: boolean
+}) {
   const t = useTranslations()
   return (
     <TRPCProvider>
@@ -103,16 +110,18 @@ function Content({ children }: { children: React.ReactNode }) {
                     <Link href="/groups">{t('Header.groups')}</Link>
                   </Button>
                 </li>
-                <li>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    asChild
-                    className="-my-3 text-primary"
-                  >
-                    <Link href="/settings">{t('Header.settings')}</Link>
-                  </Button>
-                </li>
+                {enableLogin && (
+                  <li>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      asChild
+                      className="-my-3 text-primary"
+                    >
+                      <Link href="/settings">{t('Header.settings')}</Link>
+                    </Button>
+                  </li>
+                )}
                 <li>
                   <LocaleSwitcher />
                 </li>
@@ -182,6 +191,7 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale()
   const messages = await getMessages()
+  const { enableLogin } = await getRuntimeFeatureFlags()
   return (
     <html lang={locale} suppressHydrationWarning>
       <ApplePwaSplash icon="/logo-with-text.png" color="#027756" />
@@ -196,7 +206,7 @@ export default async function RootLayout({
             <Suspense>
               <ProgressBar />
             </Suspense>
-            <Content>{children}</Content>
+            <Content enableLogin={enableLogin}>{children}</Content>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
