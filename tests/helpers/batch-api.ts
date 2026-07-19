@@ -68,7 +68,7 @@ export async function createGroupViaAPI(
   if (persistOptions.suppressActiveUserModal) {
     await page.evaluate((gId) => {
       localStorage.setItem(`${gId}-activeUser`, 'None')
-    }, result.groupId)
+    }, result.id)
   }
   if (persistOptions.addGroupToRecent) {
     await page.evaluate(
@@ -82,11 +82,11 @@ export async function createGroupViaAPI(
           JSON.stringify([group, ...existing]),
         )
       },
-      { id: result.groupId, name: groupName },
+      { id: result.id, name: groupName },
     )
   }
 
-  return result.groupId
+  return result.id
 }
 
 export async function createExpensesViaAPI(

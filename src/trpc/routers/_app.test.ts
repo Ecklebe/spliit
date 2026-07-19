@@ -46,8 +46,8 @@ async function createGroup(name: string) {
   const result = await caller.groups.create({
     groupFormValues: groupFormValues(name),
   })
-  createdGroupIds.add(result.groupId)
-  return result.groupId
+  createdGroupIds.add(result.id)
+  return result.id
 }
 
 beforeAll(async () => {
