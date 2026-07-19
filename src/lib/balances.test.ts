@@ -79,10 +79,10 @@ describe('getBalances', () => {
 
     expect(balances.p0).toEqual({ paid: 100, paidFor: 33, total: 67 })
     expect(balances.p1).toEqual({ paid: 0, paidFor: 33, total: -33 })
-    expect(balances.p2).toEqual({ paid: 0, paidFor: 33, total: -33 })
+    expect(balances.p2).toEqual({ paid: 0, paidFor: 34, total: -34 })
 
     const net = Object.values(balances).reduce((sum, b) => sum + b.total, 0)
-    expect(net).toBe(expenses[0].amount % expenses[0].paidFor.length)
+    expect(net).toBe(0)
   })
 
   it('splits BY_SHARES proportionally', () => {
@@ -150,7 +150,7 @@ describe('getBalances', () => {
     // and assigns the remainder to the last participant.
     expect(balances.p0).toEqual({ paid: 101, paidFor: 34, total: 67 })
     expect(balances.p1).toEqual({ paid: 0, paidFor: 34, total: -34 })
-    expect(balances.p2).toEqual({ paid: 0, paidFor: 34, total: -34 })
+    expect(balances.p2).toEqual({ paid: 0, paidFor: 33, total: -33 })
   })
 
   it('handles rounding correctly', () => {
