@@ -1,4 +1,3 @@
-import { saveRecentGroup } from '@/app/groups/recent-groups-helpers'
 import { QrCodeScanner } from '@/components/qr-code-scanner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,17 +6,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { useGroupActions } from '@/contexts'
 import { useMediaQuery } from '@/lib/hooks'
 import { trpc } from '@/trpc/client'
 import { Loader2, Plus, QrCode, Link as LinkIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
-type Props = {
-  reload: () => void
-}
-
-export function AddGroupByUrlButton({ reload }: Props) {
+export function AddGroupByUrlButton() {
+  const { saveRecentGroup } = useGroupActions()
   const t = useTranslations('Groups.AddByURL')
   const isDesktop = useMediaQuery('(min-width: 640px)')
   const [url, setUrl] = useState('')
@@ -49,8 +46,7 @@ export function AddGroupByUrlButton({ reload }: Props) {
         groupId: groupId,
       })
       if (group) {
-        saveRecentGroup({ id: group.id, name: group.name })
-        reload()
+        await saveRecentGroup({ id: group.id, name: group.name })
         setUrl('')
         setOpen(false)
         setScanMode(false)

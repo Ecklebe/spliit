@@ -1,11 +1,15 @@
 import { ApplePwaSplash } from '@/app/apple-pwa-splash'
+import { AuthProvider } from '@/components/auth-provider'
+import { HeaderAuthSection } from '@/components/header-auth-section'
 import { LocaleSwitcher } from '@/components/locale-switcher'
 import { ProgressBar } from '@/components/progress-bar'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
+import { GroupsProvider } from '@/contexts'
 import { env } from '@/lib/env'
+import { getRuntimeFeatureFlags } from '@/lib/featureFlags'
 import { TRPCProvider } from '@/trpc/client'
 import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider, useTranslations } from 'next-intl'
@@ -68,89 +72,108 @@ export const viewport: Viewport = {
   themeColor: '#047857',
 }
 
-function Content({ children }: { children: React.ReactNode }) {
+function Content({
+  children,
+  enableLogin,
+}: {
+  children: React.ReactNode
+  enableLogin: boolean
+}) {
   const t = useTranslations()
   return (
     <TRPCProvider>
-      <header className="fixed top-0 left-0 right-0 h-16 flex justify-between bg-white dark:bg-gray-950 bg-opacity-50 dark:bg-opacity-50 p-2 border-b backdrop-blur-sm z-50">
-        <Link
-          className="flex items-center gap-2 hover:scale-105 transition-transform"
-          href="/"
-        >
-          <h1>
-            <Image
-              src="/logo-with-text.png"
-              className="m-1"
-              width={(35 * 522) / 180}
-              height={35}
-              alt="Spliit"
-            />
-          </h1>
-        </Link>
-        <div role="navigation" aria-label="Menu" className="flex">
-          <ul className="flex items-center text-sm">
-            <li>
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-                className="-my-3 text-primary"
-              >
-                <Link href="/groups">{t('Header.groups')}</Link>
-              </Button>
-            </li>
-            <li>
-              <LocaleSwitcher />
-            </li>
-            <li>
-              <ThemeToggle />
-            </li>
-          </ul>
-        </div>
-      </header>
-
-      <div className="pt-16 flex-1 flex flex-col">{children}</div>
-
-      <footer className="sm:p-8 md:p-16 sm:mt-16 sm:text-sm md:text-base md:mt-32 bg-slate-50 dark:bg-card border-t p-6 mt-8 flex flex-col sm:flex-row sm:justify-between gap-4 text-xs [&_a]:underline">
-        <div className="flex flex-col space-y-2">
-          <div className="sm:text-lg font-semibold text-base flex space-x-2 items-center">
-            <Link className="flex items-center gap-2" href="/">
-              <Image
-                src="/logo-with-text.png"
-                className="m-1"
-                width={(35 * 522) / 180}
-                height={35}
-                alt="Spliit"
-              />
+      <AuthProvider>
+        <GroupsProvider>
+          <header className="fixed top-0 left-0 right-0 h-16 flex justify-between bg-white dark:bg-gray-950 bg-opacity-50 dark:bg-opacity-50 p-2 border-b backdrop-blur-sm z-50">
+            <Link
+              className="flex items-center gap-2 hover:scale-105 transition-transform"
+              href="/"
+            >
+              <h1>
+                <Image
+                  src="/logo-with-text.png"
+                  className="m-1"
+                  width={(35 * 522) / 180}
+                  height={35}
+                  alt="Spliit"
+                />
+              </h1>
             </Link>
-          </div>
-          <div className="flex flex-col space-y a--no-underline-text-white">
-            <span>{t('Footer.madeIn')}</span>
-            <span>
-              {t.rich('Footer.builtBy', {
-                author: (txt) => (
-                  <a href="https://scastiel.dev" target="_blank" rel="noopener">
-                    {txt}
-                  </a>
-                ),
-                source: (txt) => (
-                  <a
-                    href="https://github.com/spliit-app/spliit/graphs/contributors"
-                    target="_blank"
-                    rel="noopener"
+            <div role="navigation" aria-label="Menu" className="flex">
+              <ul className="flex items-center text-sm">
+                <li>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    asChild
+                    className="-my-3 text-primary"
                   >
-                    {txt}
-                  </a>
-                ),
-              })}
-            </span>
-            <span className="flex text-gray-500 text-sm">
-              Version: {version}
-            </span>
-          </div>
-        </div>
-      </footer>
-      <Toaster />
+                    <Link href="/groups">{t('Header.groups')}</Link>
+                  </Button>
+                </li>
+                <li>
+                  <LocaleSwitcher />
+                </li>
+                {enableLogin && (
+                  <li>
+                    <HeaderAuthSection />
+                  </li>
+                )}
+                <li>
+                  <ThemeToggle />
+                </li>
+              </ul>
+            </div>
+          </header>
+
+          <div className="pt-16 flex-1 flex flex-col">{children}</div>
+
+          <footer className="sm:p-8 md:p-16 sm:mt-16 sm:text-sm md:text-base md:mt-32 bg-slate-50 dark:bg-card border-t p-6 mt-8 flex flex-col sm:flex-row sm:justify-between gap-4 text-xs [&_a]:underline">
+            <div className="flex flex-col space-y-2">
+              <div className="sm:text-lg font-semibold text-base flex space-x-2 items-center">
+                <Link className="flex items-center gap-2" href="/">
+                  <Image
+                    src="/logo-with-text.png"
+                    className="m-1"
+                    width={(35 * 522) / 180}
+                    height={35}
+                    alt="Spliit"
+                  />
+                </Link>
+              </div>
+              <div className="flex flex-col space-y a--no-underline-text-white">
+                <span>{t('Footer.madeIn')}</span>
+                <span>
+                  {t.rich('Footer.builtBy', {
+                    author: (txt) => (
+                      <a
+                        href="https://scastiel.dev"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        {txt}
+                      </a>
+                    ),
+                    source: (txt) => (
+                      <a
+                        href="https://github.com/spliit-app/spliit/graphs/contributors"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        {txt}
+                      </a>
+                    ),
+                  })}
+                </span>
+                <span className="flex text-gray-500 text-sm">
+                  Version: {version}
+                </span>
+              </div>
+            </div>
+          </footer>
+          <Toaster />
+        </GroupsProvider>
+      </AuthProvider>
     </TRPCProvider>
   )
 }
@@ -162,6 +185,7 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale()
   const messages = await getMessages()
+  const { enableLogin } = await getRuntimeFeatureFlags()
   return (
     <html lang={locale} suppressHydrationWarning>
       <ApplePwaSplash icon="/logo-with-text.png" color="#027756" />
@@ -176,7 +200,7 @@ export default async function RootLayout({
             <Suspense>
               <ProgressBar />
             </Suspense>
-            <Content>{children}</Content>
+            <Content enableLogin={enableLogin}>{children}</Content>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

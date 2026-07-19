@@ -10,6 +10,10 @@ const config: Config = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^superjson$': '<rootDir>/src/test/superjson-jest.ts',
+    '^@auth/core/providers/zitadel$':
+      '<rootDir>/src/test/zitadel-provider-jest.ts',
+    '^@auth/prisma-adapter$': '<rootDir>/src/test/prisma-adapter-jest.ts',
+    '^@zitadel/next-auth$': '<rootDir>/src/test/zitadel-next-auth-jest.ts',
   },
 }
 

@@ -35,7 +35,7 @@ Spliit is a free and open source alternative to Splitwise. You can either use th
 
 ## Contribute
 
-The project is open to contributions. Feel free to open an issue or even a pull-request! 
+The project is open to contributions. Feel free to open an issue or even a pull-request!
 Join the discussion in [the Spliit Discord server](https://discord.gg/YSyVXbwvSY).
 
 If you want to contribute financially and help us keep the application free and without ads, you can also:
@@ -45,7 +45,7 @@ If you want to contribute financially and help us keep the application free and 
 
 ### Translation
 
-The project's translations are managed using [our Weblate project](https://hosted.weblate.org/projects/spliit/spliit/). 
+The project's translations are managed using [our Weblate project](https://hosted.weblate.org/projects/spliit/spliit/).
 You can easily add missing translations to the project or even add a new language!
 Here is the current state of translation:
 
@@ -168,6 +168,58 @@ NEXT_PUBLIC_ENABLE_CATEGORY_EXTRACT=true
 OPENAI_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 OPENAI_TEXT_MODEL=gtp3.5-turbo
 ```
+
+### Group cloud sync
+
+Spliit allows users to sync their groups to the cloud and access them across multiple devices. This feature is entirely optional - anonymous, URL-based group access (Spliit's default, no-account model) always works regardless of whether it's configured - and is off by default. Signing in is handed off to one or more **OIDC providers** you configure; there is no email/SMTP/magic-link step at all.
+
+#### How it works
+
+1. An operator registers one or more OIDC providers via environment variables (see below)
+2. Once configured, users can sign in with any of the configured providers
+3. On first sign-in, a sync profile is created for that user
+4. Users can opt in to sync individual groups to their profile
+5. They can access all their synced groups from any device by signing in again
+6. Users control sync preferences (sync can be enabled/disabled at any time for each group)
+
+#### OIDC setup
+
+To enable sign-in/group sync, register at least one OIDC provider:
+
+```.env
+AUTH_SECRET=<run: openssl rand -base64 32>
+AUTH_URL=https://your-domain.example.com
+OIDC_PROVIDERS=zitadel
+
+OIDC_PROVIDER_ZITADEL_NAME=Zitadel
+OIDC_PROVIDER_ZITADEL_ISSUER=https://your-zitadel-instance.example.com
+OIDC_PROVIDER_ZITADEL_CLIENT_ID=<from your OIDC provider>
+OIDC_PROVIDER_ZITADEL_CLIENT_SECRET=<from your OIDC provider>
+```
+
+`OIDC_PROVIDERS` is a comma-separated list of provider ids (e.g. `zitadel,keycloak`); each id needs its own `OIDC_PROVIDER_<ID>_{NAME,ISSUER,CLIENT_ID,CLIENT_SECRET}` set. `zitadel` gets Auth.js's built-in Zitadel preset; any other id is registered as a generic OIDC provider, so this works with any standards-compliant OIDC issuer (Keycloak, Authentik, Okta, etc.), not just Zitadel. Register your OIDC app's redirect URI as `<your-domain>/api/auth/callback/<provider-id>`.
+
+`AUTH_URL` is strongly recommended whenever the app runs behind a reverse proxy: without it, Auth.js's own request-based origin detection can be unreliable in some proxy setups, causing OAuth redirects to use the wrong host.
+
+When `OIDC_PROVIDERS` is empty (the default), the whole feature is fully hidden - not just unlinked - throughout the app: no Settings nav link, no sign-in UI, and `/settings`/`/api/auth/*` genuinely 404 rather than being unreachable-but-present.
+
+#### Sync behavior
+
+- Groups are stored locally by default (no account required)
+- Users can enable sync for individual groups at any time
+- Synced groups appear in "My groups" when signed in
+- Local groups remain accessible even when signed out
+- Disabling sync does not delete the group, only removes cloud association
+
+### Admin stats page
+
+A minimal, read-only `/admin` page (group/participant/expense/user/synced-group counts) is available, styled after Traefik's own `/dashboard` entrypoint. It's off by default, independent of the OIDC setting above:
+
+```.env
+ENABLE_ADMIN=true
+```
+
+When enabled, it's still gated by an OIDC "admin" role grant (an `admins` project role on your OIDC provider, asserted into the ID token's roles claim) - enabling it with no OIDC provider configured just leaves the page permanently unreachable, since nobody can ever hold that role without a login path. No administrative actions are wired up yet; it's read-only.
 
 ## License
 

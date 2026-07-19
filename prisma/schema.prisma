@@ -23,16 +23,18 @@ model Group {
   activities             Activity[]
   createdAt              DateTime      @default(now())
   deleteAt               DateTime?
+  syncedGroups           SyncedGroup[]
 }
 
 model Participant {
-  id              String           @id
-  name            String
-  group           Group            @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId         String
-  expensesPaidBy  Expense[]
-  expensesPaidFor ExpensePaidFor[]
-  expenseComments ExpenseComment[]
+  id                        String           @id
+  name                      String
+  group                     Group            @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId                   String
+  expensesPaidBy            Expense[]
+  expensesPaidFor           ExpensePaidFor[]
+  expenseComments           ExpenseComment[]
+  activeSyncedGroupsForUser SyncedGroup[]
 }
 
 model Category {
@@ -154,3 +156,75 @@ enum ActivityType {
   DELETE_EXPENSE
 }
 
+// NextAuth models
+model User {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  syncProfile   SyncProfile?
+  createdAt     DateTime        @default(now())
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Sync-specific models
+model SyncProfile {
+  id              String            @id @default(cuid())
+  userId          String            @unique
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  preferences     SyncPreferences?
+  syncedGroups    SyncedGroup[]
+  omittedGroupIds String[]
+  createdAt       DateTime          @default(now())
+}
+
+model SyncPreferences {
+  id            String      @id @default(cuid())
+  profileId     String      @unique
+  profile       SyncProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  syncNewGroups Boolean     @default(false)
+}
+
+model SyncedGroup {
+  id                  String       @id @default(cuid())
+  profileId           String
+  profile             SyncProfile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  groupId             String
+  group               Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  activeParticipantId String?
+  activeParticipant   Participant? @relation(fields: [activeParticipantId], references: [id], onDelete: SetNull)
+  isStarred           Boolean      @default(false)
+  isArchived          Boolean      @default(false)
+  syncedAt            DateTime     @default(now())
+
+  @@unique([profileId, groupId])
+}

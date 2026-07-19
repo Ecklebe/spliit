@@ -8,7 +8,9 @@
     }
   },
   "Header": {
-    "groups": "Gruppen"
+    "groups": "Gruppen",
+    "settings": "Einstellungen",
+    "login": "Anmelden"
   },
   "Footer": {
     "madeIn": "Entwickelt in Montréal, Québec 🇨🇦",
@@ -64,7 +66,9 @@
     "NoRecent": {
       "description": "Du hast in der letzten Zeit keine Gruppe besucht.",
       "create": "Erstelle eine",
-      "orAsk": "oder bitte einen Freund, dir einen Link zu einer Existierenden zu schicken."
+      "orAsk": "oder bitte einen Freund, dir einen Link zu einer Existierenden zu schicken.",
+      "enableCloudSync": "Cloud-Synchronisierung aktivieren",
+      "enableCloudSyncHelp": "um auf deine Gruppen geräteübergreifend zuzugreifen."
     },
     "recent": "Letzte Gruppen",
     "starred": "Favorisierte Gruppen",
@@ -377,7 +381,56 @@
     "empty": "Noch keine Gruppeninformationen vorhanden."
   },
   "Settings": {
-    "title": "Einstellungen"
+    "title": "Einstellungen",
+    "sections": {
+      "account": "Konto",
+      "preferences": "Einstellungen",
+      "actions": "Aktionen",
+      "syncedGroups": "Synchronisierte Gruppen"
+    },
+    "CloudSync": {
+      "title": "Cloud-Synchronisierung",
+      "description": {
+        "signedIn": "Verwalte deine synchronisierten Gruppen und Einstellungen",
+        "signedOut": "Melde dich an, um deine Gruppen geräteübergreifend zu synchronisieren"
+      }
+    },
+    "SignIn": {
+      "signInWith": "Mit {provider} anmelden",
+      "none": "Für diese Instanz sind keine Anmeldeanbieter konfiguriert."
+    },
+    "Account": {
+      "signedInAs": "Angemeldet als",
+      "signOut": "Abmelden",
+      "signOutDialog": {
+        "description": "Möchtest du die synchronisierten Gruppen von diesem Gerät entfernen?",
+        "keepGroups": "Nein, Gruppen behalten",
+        "clearGroups": "Ja, Gruppen entfernen"
+      }
+    },
+    "SyncPreferences": {
+      "syncNewGroups": {
+        "label": "Neue Gruppen automatisch synchronisieren",
+        "description": "Beim Besuchen oder Erstellen von Gruppen automatisch synchronisieren"
+      }
+    },
+    "SyncAll": {
+      "actions": {
+        "syncing": "Synchronisiere…",
+        "syncNow": "Jetzt alle Gruppen synchronisieren"
+      },
+      "result": {
+        "synced": "{count} Gruppe(n) synchronisiert",
+        "skipped": "{count} Gruppe(n) übersprungen"
+      }
+    },
+    "SyncedGroups": {
+      "empty": "Noch keine synchronisierten Gruppen",
+      "count": "{count} Gruppe(n) in der Cloud synchronisiert",
+      "actions": {
+        "unsync": "Synchronisierung aufheben"
+      }
+    }
   },
   "Share": {
     "title": "Teilen",
@@ -527,5 +580,51 @@
     "fileEmpty": "Die hochgeladene Datei war leer.",
     "invalidAmount": "Ungültiger Betrag in einer oder mehreren Zeilen.",
     "invalidDate": "Ungültiges Ausgabedatum in einer oder mehreren Zeilen."
+  },
+  "Common": {
+    "loading": "Lädt…",
+    "syncing": "Synchronisiere…"
+  },
+  "AuthError": {
+    "title": "Anmeldefehler",
+    "subtitle": "Anmeldung nicht möglich",
+    "messages": {
+      "configuration": "Fehler in der Authentifizierungskonfiguration. Bitte kontaktiere den Support.",
+      "default": "Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es erneut."
+    },
+    "actions": {
+      "goToSettings": "Zu den Einstellungen"
+    }
+  },
+  "SyncErrors": {
+    "toast": {
+      "title": "Synchronisierung fehlgeschlagen",
+      "saveLocalFailed": "Gruppe lokal gespeichert, aber nicht mit der Cloud synchronisiert",
+      "starFailed": "Favoritenstatus konnte nicht mit der Cloud synchronisiert werden",
+      "unstarFailed": "Entfernen des Favoritenstatus konnte nicht mit der Cloud synchronisiert werden",
+      "archiveFailed": "Archivstatus konnte nicht mit der Cloud synchronisiert werden",
+      "unarchiveFailed": "Wiederherstellung konnte nicht mit der Cloud synchronisiert werden"
+    },
+    "auth": {
+      "required": "Du musst angemeldet sein, um diese Aktion auszuführen"
+    },
+    "validation": {
+      "maxGroups": "Maximal 100 Gruppen pro Anfrage",
+      "invalidParticipant": "Ungültiger Teilnehmer für diese Gruppe",
+      "invalidParticipantForGroup": "Ungültiger Teilnehmer für Gruppe {groupId}",
+      "tooManyGroups": "Es können nicht mehr als {max} Gruppen gleichzeitig synchronisiert werden"
+    },
+    "notSynced": "Gruppe ist nicht synchronisiert"
+  },
+  "Admin": {
+    "title": "Admin",
+    "description": "Schreibgeschützte Übersicht dieser Instanz.",
+    "stats": {
+      "groups": "Gruppen",
+      "participants": "Teilnehmer",
+      "expenses": "Ausgaben",
+      "signedInUsers": "Angemeldete Benutzer",
+      "syncedGroups": "Synchronisierte Gruppen"
+    }
   }
 }

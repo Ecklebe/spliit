@@ -1,4 +1,5 @@
 import { RecentGroupList } from '@/app/groups/recent-group-list'
+import { getRuntimeFeatureFlags } from '@/lib/featureFlags'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
@@ -10,5 +11,6 @@ export async function generateMetadata() {
 }
 
 export default async function GroupsPage() {
-  return <RecentGroupList />
+  const { enableLogin } = await getRuntimeFeatureFlags()
+  return <RecentGroupList enableLogin={enableLogin} />
 }
