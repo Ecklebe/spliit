@@ -20,6 +20,14 @@ export default async function AdminPage() {
   if (env.OIDC_PROVIDERS.length === 0) notFound()
 
   const session = await getServerSession()
+  // TEMPORARY diagnostic - remove once the role-gating issue is confirmed
+  // fixed. Logs only presence/shape, never the raw session/token.
+  console.log('[admin-debug]', {
+    hasSession: !!session,
+    userId: session?.user?.id,
+    email: session?.user?.email,
+    roles: session?.user?.roles,
+  })
   if (!session?.user?.roles?.includes('admin')) notFound()
 
   const t = await getTranslations('Admin')
