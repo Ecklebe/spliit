@@ -15,6 +15,7 @@ const groupFormValues = (name: string): GroupFormValues => ({
   information: 'Router test group',
   currency: '$',
   currencyCode: 'USD',
+  fixedExpenseDateGroups: false,
   participants: [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }],
 })
 

@@ -30,6 +30,7 @@ const baseGroupValues = (
   information: 'Initial information',
   currency: '$',
   currencyCode: 'USD',
+  fixedExpenseDateGroups: false,
   participants: [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }],
 })
 
@@ -119,6 +120,7 @@ describe('group persistence', () => {
         information: 'Updated information',
         currency: 'EUR',
         currencyCode: 'EUR',
+        fixedExpenseDateGroups: false,
         participants: [
           { id: alice!.id, name: 'Alicia' },
           { id: bob!.id, name: 'Bob' },
