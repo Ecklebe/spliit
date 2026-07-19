@@ -20,6 +20,7 @@
     "create": "Criar despesa",
     "createFirst": "Crie a primeira",
     "noExpenses": "Seu grupo ainda não contém nenhuma despesa.",
+    "export": "Exportar",
     "exportJson": "Exportar para JSON",
     "exportCsv": "Exportar para CSV",
     "searchPlaceholder": "Pesquisar por uma despesa…",
