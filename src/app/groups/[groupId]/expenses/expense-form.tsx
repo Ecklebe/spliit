@@ -38,6 +38,7 @@ import { Locale } from '@/i18n/request'
 import { defaultCurrencyList, getCurrency } from '@/lib/currency'
 import { RuntimeFeatureFlags } from '@/lib/featureFlags'
 import { useActiveUser, useCurrencyRate } from '@/lib/hooks'
+import { getLocationFromSearchParams } from '@/lib/location'
 import { normalizeNumberInput } from '@/lib/number-input'
 import {
   ExpenseFormValues,
@@ -58,24 +59,13 @@ import { RecurrenceRule } from '@prisma/client'
 import { ChevronRight, Save } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { DeletePopup } from '../../../../components/delete-popup'
 import { extractCategoryFromTitle } from '../../../../components/expense-form-actions'
 import { Textarea } from '../../../../components/ui/textarea'
-
-function getLocationFromSearchParams(
-  searchParams: ReadonlyURLSearchParams,
-): ExpenseFormValues['location'] {
-  return searchParams.get('latitude') && searchParams.get('longitude')
-    ? {
-        latitude: Number(searchParams.get('latitude')),
-        longitude: Number(searchParams.get('longitude')),
-      }
-    : null
-}
 
 const getDefaultSplittingOptions = (
   group: NonNullable<AppRouterOutput['groups']['get']['group']>,

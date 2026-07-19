@@ -6,17 +6,24 @@ import {
 } from '@/test/database'
 import { ActivityType, RecurrenceRule, SplitMode } from '@prisma/client'
 import {
+  addComment,
   createExpense,
   createGroup,
   createPayloadForNewRecurringExpenseLink,
   createRecurringExpenses,
+  deleteComment,
   deleteExpense,
   getActivities,
+  getComment,
+  getComments,
   getExpense,
   getGroupExpenses,
   getGroupExpensesParticipants,
   getGroups,
   randomId,
+  restoreGroup,
+  scheduleDeleteGroup,
+  updateComment,
   updateExpense,
   updateGroup,
 } from './api'
@@ -388,5 +395,133 @@ describe('recurring expenses', () => {
       },
     })
     expect(processedLinks.every((link) => link.nextExpenseCreatedAt)).toBe(true)
+  })
+})
+
+describe('group deletion and restoration', () => {
+  it('schedules a group for deletion and can restore it before the grace period ends', async () => {
+    if (!testRequiresDatabase()) return
+
+    const group = await createTrackedGroup(baseGroupValues('Trip to delete'))
+    const [alice] = group.participants
+
+    const scheduled = await scheduleDeleteGroup(
+      group.id,
+      group.name,
+      alice!.id,
+    )
+    expect(scheduled.deleteAt).not.toBeNull()
+    expect(scheduled.deleteAt!.getTime()).toBeGreaterThan(Date.now())
+
+    await expect(getActivities(group.id)).resolves.toEqual([
+      expect.objectContaining({
+        activityType: ActivityType.UPDATE_GROUP,
+        participantId: alice!.id,
+      }),
+    ])
+
+    const restored = await restoreGroup(group.id)
+    expect(restored.deleteAt).toBeNull()
+  })
+
+  it('rejects scheduling deletion when the confirmation name does not match', async () => {
+    if (!testRequiresDatabase()) return
+
+    const group = await createTrackedGroup(baseGroupValues('Correct name'))
+
+    await expect(
+      scheduleDeleteGroup(group.id, 'Wrong name'),
+    ).rejects.toThrow('Group name does not match')
+  })
+
+  it('rejects restoring a group that is not scheduled for deletion', async () => {
+    if (!testRequiresDatabase()) return
+
+    const group = await createTrackedGroup()
+
+    await expect(restoreGroup(group.id)).rejects.toThrow(
+      'Group is not marked for deletion',
+    )
+  })
+
+  it('permanently deletes a group and all its data once past its deleteAt time', async () => {
+    if (!testRequiresDatabase()) return
+
+    const group = await createTrackedGroup(baseGroupValues('Past due trip'))
+    const [alice, bob] = group.participants
+
+    await createExpense(
+      expenseValues(group.participants, { paidBy: alice!.id }),
+      group.id,
+      alice!.id,
+    )
+
+    // Simulate a group whose 30-day grace period has already elapsed.
+    await prisma.group.update({
+      where: { id: group.id },
+      data: { deleteAt: new Date(Date.now() - 1000) },
+    })
+
+    // deleteScheduledGroups() isn't exported directly - it's invoked as a
+    // side effect of getGroupExpenses(), same as createRecurringExpenses().
+    await getGroupExpenses(group.id)
+
+    await expect(
+      prisma.group.findUnique({ where: { id: group.id } }),
+    ).resolves.toBeNull()
+
+    // Untrack it: the group (and its cascaded expenses/participants) is
+    // already gone, so the afterEach cleanup's deleteMany should not be
+    // asked to look for it again.
+    createdGroupIds.delete(group.id)
+    void bob
+  })
+})
+
+describe('expense comments', () => {
+  it('creates, lists, updates, and deletes comments on an expense', async () => {
+    if (!testRequiresDatabase()) return
+
+    const group = await createTrackedGroup()
+    const [alice, bob] = group.participants
+
+    const expense = await createExpense(
+      expenseValues(group.participants, { paidBy: alice!.id }),
+      group.id,
+      alice!.id,
+    )
+
+    const comment = await addComment(expense.id, alice!.id, 'Great dinner!')
+    expect(comment).toMatchObject({
+      expenseId: expense.id,
+      participantId: alice!.id,
+      comment: 'Great dinner!',
+    })
+
+    await addComment(expense.id, bob!.id, 'Agreed')
+
+    const comments = await getComments(expense.id)
+    expect(comments.map((c) => c.comment)).toEqual(['Agreed', 'Great dinner!'])
+    expect(comments[0]!.participant.id).toBe(bob!.id)
+
+    const fetched = await getComment(comment.id)
+    expect(fetched).toMatchObject({ comment: 'Great dinner!' })
+
+    await updateComment(comment.id, 'Great dinner, actually!')
+    await expect(getComment(comment.id)).resolves.toMatchObject({
+      comment: 'Great dinner, actually!',
+    })
+
+    await deleteComment(comment.id)
+    await expect(getComment(comment.id)).resolves.toBeNull()
+    await expect(getComments(expense.id)).resolves.toHaveLength(1)
+  })
+
+  it('rejects updating a comment that does not exist', async () => {
+    if (!testRequiresDatabase()) return
+
+    await expect(
+      updateComment('nonexistent-comment-id', 'edited'),
+    ).rejects.toThrow('Invalid Comment ID')
   })
 })

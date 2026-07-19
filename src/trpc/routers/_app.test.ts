@@ -216,7 +216,10 @@ describe('appRouter expenses contract', () => {
       },
     })
 
-    await expect(caller.groups.stats.get({ groupId })).resolves.toEqual({
+    // .toMatchObject, not .toEqual: stats.get's response has since grown
+    // fields unrelated to what this test is verifying here (e.g.
+    // monthlySpending, added by #532's spending-visuals feature).
+    await expect(caller.groups.stats.get({ groupId })).resolves.toMatchObject({
       totalGroupSpendings: 12000,
       totalParticipantSpendings: undefined,
       totalParticipantShare: undefined,
