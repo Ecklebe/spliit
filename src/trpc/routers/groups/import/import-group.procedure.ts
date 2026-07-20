@@ -1,6 +1,7 @@
 import { createExpense, createGroup } from '@/lib/api'
 import { buildExpensesFromFileImport } from '@/lib/imports/file-import'
 import { baseProcedure } from '@/trpc/init'
+import { assertGroupCreationAllowed } from '@/trpc/routers/groups/require-login-gate'
 import { z } from 'zod'
 
 // Creates a new group from a file in a single request (no progress tracking).
@@ -13,7 +14,8 @@ export const importGroupFromFileProcedure = baseProcedure
       fileName: z.string().trim().optional(),
     }),
   )
-  .mutation(async ({ input: { fileContent, groupName } }) => {
+  .mutation(async ({ ctx, input: { fileContent, groupName } }) => {
+    await assertGroupCreationAllowed(ctx.req)
     const trimmed = fileContent.trim()
     if (!trimmed) {
       throw new Error('Uploaded file was empty.')
