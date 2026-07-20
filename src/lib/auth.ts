@@ -29,7 +29,16 @@ const extendedAdapter: Adapter = {
 function buildProviders() {
   return oidcProviders.map(({ id, name, issuer, clientId, clientSecret }) => {
     if (id === 'zitadel') {
-      return Zitadel({ clientId, clientSecret, issuer })
+      // checks: @auth/core only auto-adds a `state` check when
+      // redirectProxyUrl is set (an unrelated multi-instance feature we
+      // don't use) - otherwise it relies on PKCE alone (its own default is
+      // checks: ['pkce']). Most providers tolerate a bare PKCE flow with no
+      // state param, but some (Authelia included) strictly require state to
+      // be present and at least 8 characters, rejecting the authorization
+      // request outright otherwise - adding both checks explicitly keeps
+      // this working across any configured provider, not just the lenient
+      // ones.
+      return Zitadel({ clientId, clientSecret, issuer, checks: ['pkce', 'state'] })
     }
     return {
       id,
@@ -38,6 +47,7 @@ function buildProviders() {
       issuer,
       clientId,
       clientSecret,
+      checks: ['pkce', 'state'],
       // Request a `groups` scope/claim on top of the OIDC defaults -
       // Authelia (and a number of other generic OIDC providers) expose
       // group membership this way. Zitadel has its own dedicated nested
