@@ -63,6 +63,10 @@
       "successTitle": "Gruppe erstellt",
       "successDescription": "Gruppe {name} wurde aus dem Import erstellt."
     },
+    "CreateErrors": {
+      "sessionExpiredTitle": "Gruppe konnte nicht erstellt werden",
+      "sessionExpiredDescription": "Auf dieser Instanz ist jetzt eine Anmeldung erforderlich, um neue Gruppen zu erstellen. Bitte melde dich an und versuche es erneut."
+    },
     "NoRecent": {
       "description": "Du hast in der letzten Zeit keine Gruppe besucht.",
       "create": "Erstelle eine",
@@ -625,6 +629,11 @@
       "expenses": "Ausgaben",
       "signedInUsers": "Angemeldete Benutzer",
       "syncedGroups": "Synchronisierte Gruppen"
+    },
+    "requireLoginToggle": {
+      "label": "Anmeldung für neue Gruppen erforderlich",
+      "description": "Wenn aktiviert, können nur angemeldete Benutzer neue Gruppen erstellen. Bestehende Gruppen bleiben für alle über ihren Link zugänglich – dies betrifft nur die Erstellung neuer Gruppen.",
+      "errorTitle": "Einstellung konnte nicht aktualisiert werden"
     }
   }
 }

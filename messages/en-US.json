@@ -64,6 +64,10 @@
       "successTitle": "Group created",
       "successDescription": "Group {name} was created from import."
     },
+    "CreateErrors": {
+      "sessionExpiredTitle": "Could not create group",
+      "sessionExpiredDescription": "This instance now requires signing in to create new groups. Please sign in and try again."
+    },
     "NoRecent": {
       "description": "You have not visited any group recently.",
       "create": "Create one",
@@ -708,6 +712,11 @@
       "expenses": "Expenses",
       "signedInUsers": "Signed-in Users",
       "syncedGroups": "Synced Groups"
+    },
+    "requireLoginToggle": {
+      "label": "Require login to create groups",
+      "description": "When enabled, only signed-in users can create new groups. Existing groups remain accessible to everyone via their link - this only affects new group creation.",
+      "errorTitle": "Could not update setting"
     }
   }
 }

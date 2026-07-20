@@ -67,7 +67,13 @@ function sortGroups({
   }
 }
 
-export function RecentGroupList({ enableLogin }: { enableLogin: boolean }) {
+export function RecentGroupList({
+  enableLogin,
+  canCreateGroups,
+}: {
+  enableLogin: boolean
+  canCreateGroups: boolean
+}) {
   const {
     recentGroups,
     starredGroupIds,
@@ -85,6 +91,7 @@ export function RecentGroupList({ enableLogin }: { enableLogin: boolean }) {
       archivedGroups={archivedGroupIds}
       isRefetching={isRefetching}
       enableLogin={enableLogin}
+      canCreateGroups={canCreateGroups}
     />
   )
 }
@@ -95,12 +102,14 @@ function RecentGroupList_({
   archivedGroups,
   isRefetching,
   enableLogin,
+  canCreateGroups,
 }: {
   groups: RecentGroups
   starredGroups: Set<string>
   archivedGroups: Set<string>
   isRefetching: boolean
   enableLogin: boolean
+  canCreateGroups: boolean
 }) {
   const t = useTranslations('Groups')
   const { data: session } = useSession()
@@ -110,7 +119,7 @@ function RecentGroupList_({
 
   if (isLoading || !data) {
     return (
-      <GroupsPage isRefetching={isRefetching}>
+      <GroupsPage isRefetching={isRefetching} canCreateGroups={canCreateGroups}>
         <p>
           <Loader2 className="w-4 m-4 mr-2 inline animate-spin" />{' '}
           {t('loadingRecent')}
@@ -121,7 +130,7 @@ function RecentGroupList_({
 
   if (data.groups.length === 0) {
     return (
-      <GroupsPage isRefetching={isRefetching}>
+      <GroupsPage isRefetching={isRefetching} canCreateGroups={canCreateGroups}>
         <div className="text-sm space-y-2">
           <p>{t('NoRecent.description')}</p>
           {enableLogin && !session && (
@@ -134,12 +143,14 @@ function RecentGroupList_({
               {t('NoRecent.enableCloudSyncHelp')}
             </p>
           )}
-          <p>
-            <Button variant="link" asChild className="-m-4">
-              <Link href={`/groups/create`}>{t('NoRecent.create')}</Link>
-            </Button>{' '}
-            {t('NoRecent.orAsk')}
-          </p>
+          {canCreateGroups && (
+            <p>
+              <Button variant="link" asChild className="-m-4">
+                <Link href={`/groups/create`}>{t('NoRecent.create')}</Link>
+              </Button>{' '}
+              {t('NoRecent.orAsk')}
+            </p>
+          )}
         </div>
       </GroupsPage>
     )
@@ -161,7 +172,7 @@ function RecentGroupList_({
   })
 
   return (
-    <GroupsPage isRefetching={isRefetching}>
+    <GroupsPage isRefetching={isRefetching} canCreateGroups={canCreateGroups}>
       {starredGroupInfo.length > 0 && (
         <>
           <h2 className="mb-2">{t('starred')}</h2>
@@ -213,7 +224,8 @@ function GroupList({
 function GroupsPage({
   children,
   isRefetching,
-}: PropsWithChildren<{ isRefetching?: boolean }>) {
+  canCreateGroups,
+}: PropsWithChildren<{ isRefetching?: boolean; canCreateGroups: boolean }>) {
   const t = useTranslations('Groups')
   const router = useRouter()
   const { saveRecentGroup } = useGroupActions()
@@ -227,27 +239,29 @@ function GroupsPage({
         {isRefetching && <SyncIndicator />}
         <div className="flex gap-2">
           <AddGroupByUrlButton />
-          <div className="inline-flex">
-            <Button asChild className="rounded-r-none">
-              <Link href="/groups/create">{t('create')}</Link>
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  className="rounded-l-none px-2"
-                  aria-label={t('CreateOptions.openMenu')}
-                  title={t('CreateOptions.openMenu')}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setImportOpen(true)}>
-                  {t('CreateOptions.importFromFile')}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          {canCreateGroups && (
+            <div className="inline-flex">
+              <Button asChild className="rounded-r-none">
+                <Link href="/groups/create">{t('create')}</Link>
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    className="rounded-l-none px-2"
+                    aria-label={t('CreateOptions.openMenu')}
+                    title={t('CreateOptions.openMenu')}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setImportOpen(true)}>
+                    {t('CreateOptions.importFromFile')}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
       </div>
       <FileImportModal
