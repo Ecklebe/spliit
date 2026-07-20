@@ -279,3 +279,16 @@ describe('appRouter expenses contract', () => {
     ).rejects.toMatchObject({ code: 'BAD_REQUEST' })
   })
 })
+
+describe('appRouter admin contract', () => {
+  // No DB gate needed: ENABLE_ADMIN/OIDC_PROVIDERS are unset in this test
+  // env, so adminProcedure rejects before ever touching the database.
+  it('rejects getSettings/updateSettings with NOT_FOUND when admin is disabled', async () => {
+    await expect(caller.admin.getSettings()).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+    })
+    await expect(
+      caller.admin.updateSettings({ requireLoginToCreateGroups: true }),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' })
+  })
+})
