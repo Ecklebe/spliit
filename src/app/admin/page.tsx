@@ -1,3 +1,4 @@
+import { RequireLoginToggle } from '@/app/admin/components/require-login-toggle'
 import { getServerSession } from '@/lib/auth'
 import { env } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
@@ -61,6 +62,7 @@ export default async function AdminPage() {
           </div>
         ))}
       </div>
+      <RequireLoginToggle />
     </div>
   )
 }
