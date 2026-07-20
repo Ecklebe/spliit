@@ -228,3 +228,13 @@ model SyncedGroup {
 
   @@unique([profileId, groupId])
 }
+
+// Admin-configurable instance settings, mutable at runtime from /admin (see
+// src/lib/instance-settings.ts) - unlike env.ts, which is parsed once at
+// process start and needs a redeploy to change. Singleton: exactly one row,
+// seeded by this model's own migration (id = 'singleton'), never
+// app-generated via randomId() like most other models.
+model InstanceSettings {
+  id                         String  @id
+  requireLoginToCreateGroups Boolean @default(false)
+}
