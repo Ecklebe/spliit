@@ -1,3 +1,4 @@
+import { adminRouter } from '@/trpc/routers/admin'
 import { categoriesRouter } from '@/trpc/routers/categories'
 import { groupsRouter } from '@/trpc/routers/groups'
 import { syncRouter } from '@/trpc/routers/sync'
@@ -8,6 +9,7 @@ export const appRouter = createTRPCRouter({
   groups: groupsRouter,
   categories: categoriesRouter,
   sync: syncRouter,
+  admin: adminRouter,
 })
 
 export type AppRouter = typeof appRouter
