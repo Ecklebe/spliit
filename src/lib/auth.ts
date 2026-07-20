@@ -54,6 +54,16 @@ function buildProviders() {
       // roles claim instead (handled separately below), so this only
       // matters for non-Zitadel providers.
       authorization: { params: { scope: 'openid profile email groups' } },
+      // @auth/core trusts the ID token's own claims by default and only
+      // calls the userinfo endpoint when idToken is explicitly false.
+      // Authelia's ID token is minimal (no email/groups in it at all -
+      // confirmed live: account creation failed with "Argument `email` is
+      // missing" even though the `email` scope was granted) and puts the
+      // full profile in the userinfo response instead, per its own
+      // discovery document. Forcing the userinfo round-trip keeps this
+      // working for any provider that draws the same minimal-ID-token/
+      // full-userinfo distinction, not just Authelia.
+      idToken: false,
     } satisfies OIDCConfig<Record<string, unknown>>
   })
 }
