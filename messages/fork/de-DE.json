@@ -1,0 +1,195 @@
+{
+  "Header": {
+    "login": "Anmelden",
+    "settings": "Einstellungen"
+  },
+  "Groups": {
+    "NoRecent": {
+      "enableCloudSync": "Cloud-Synchronisierung aktivieren",
+      "enableCloudSyncHelp": "um auf deine Gruppen geräteübergreifend zuzugreifen."
+    },
+    "CreateErrors": {
+      "sessionExpiredDescription": "Auf dieser Instanz ist jetzt eine Anmeldung erforderlich, um neue Gruppen zu erstellen. Bitte melde dich an und versuche es erneut.",
+      "sessionExpiredTitle": "Gruppe konnte nicht erstellt werden"
+    },
+    "CreateOptions": {
+      "importFromFile": "Aus Datei importieren",
+      "newGroup": "Neue Gruppe",
+      "openMenu": "Erstelloptionen öffnen"
+    },
+    "ImportDialog": {
+      "successDescription": "Gruppe {name} wurde aus dem Import erstellt.",
+      "successTitle": "Gruppe erstellt"
+    }
+  },
+  "GroupForm": {
+    "Settings": {
+      "Delete": {
+        "description": "Das Löschen einer Gruppe führt zu einer 30-tägigen Deaktivierungsphase, nach deren Ablauf alle Daten endgültig gelöscht werden und nicht mehr wiederhergestellt werden können.",
+        "title": "Gruppe löschen?"
+      }
+    },
+    "Delete": {
+      "description": "Dies führt zu einer 30-tägigen Deaktivierungsphase, nach deren Ablauf alle Daten endgültig gelöscht werden und nicht mehr wiederhergestellt werden können.",
+      "title": "Gruppe löschen"
+    }
+  },
+  "ExpenseForm": {
+    "location": "Standort",
+    "locationDescription": "Wo ist das entstanden?"
+  },
+  "Settings": {
+    "Account": {
+      "signOut": "Abmelden",
+      "signOutDialog": {
+        "clearGroups": "Ja, Gruppen entfernen",
+        "description": "Möchtest du die synchronisierten Gruppen von diesem Gerät entfernen?",
+        "keepGroups": "Nein, Gruppen behalten"
+      },
+      "signedInAs": "Angemeldet als"
+    },
+    "CloudSync": {
+      "description": {
+        "signedIn": "Verwalte deine synchronisierten Gruppen und Einstellungen",
+        "signedOut": "Melde dich an, um deine Gruppen geräteübergreifend zu synchronisieren"
+      },
+      "title": "Cloud-Synchronisierung"
+    },
+    "SignIn": {
+      "none": "Für diese Instanz sind keine Anmeldeanbieter konfiguriert.",
+      "signInWith": "Mit {provider} anmelden"
+    },
+    "SyncAll": {
+      "actions": {
+        "syncNow": "Jetzt alle Gruppen synchronisieren",
+        "syncing": "Synchronisiere…"
+      },
+      "result": {
+        "skipped": "{count} Gruppe(n) übersprungen",
+        "synced": "{count} Gruppe(n) synchronisiert"
+      }
+    },
+    "SyncPreferences": {
+      "syncNewGroups": {
+        "description": "Beim Besuchen oder Erstellen von Gruppen automatisch synchronisieren",
+        "label": "Neue Gruppen automatisch synchronisieren"
+      }
+    },
+    "SyncedGroups": {
+      "actions": {
+        "unsync": "Synchronisierung aufheben"
+      },
+      "count": "{count} Gruppe(n) in der Cloud synchronisiert",
+      "empty": "Noch keine synchronisierten Gruppen"
+    },
+    "sections": {
+      "account": "Konto",
+      "actions": "Aktionen",
+      "preferences": "Einstellungen",
+      "syncedGroups": "Synchronisierte Gruppen"
+    }
+  },
+  "Admin": {
+    "description": "Schreibgeschützte Übersicht dieser Instanz.",
+    "requireLoginToggle": {
+      "description": "Wenn aktiviert, können nur angemeldete Benutzer neue Gruppen erstellen. Bestehende Gruppen bleiben für alle über ihren Link zugänglich – dies betrifft nur die Erstellung neuer Gruppen.",
+      "errorTitle": "Einstellung konnte nicht aktualisiert werden",
+      "label": "Anmeldung für neue Gruppen erforderlich"
+    },
+    "stats": {
+      "expenses": "Ausgaben",
+      "groups": "Gruppen",
+      "participants": "Teilnehmer",
+      "signedInUsers": "Angemeldete Benutzer",
+      "syncedGroups": "Synchronisierte Gruppen"
+    },
+    "title": "Admin"
+  },
+  "AuthError": {
+    "actions": {
+      "goToSettings": "Zu den Einstellungen"
+    },
+    "messages": {
+      "configuration": "Fehler in der Authentifizierungskonfiguration. Bitte kontaktiere den Support.",
+      "default": "Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es erneut."
+    },
+    "subtitle": "Anmeldung nicht möglich",
+    "title": "Anmeldefehler"
+  },
+  "Common": {
+    "loading": "Lädt…",
+    "syncing": "Synchronisiere…"
+  },
+  "DeleteGroupButton": {
+    "description": "Willst du diese Gruppe wirklich löschen? Gib zum Bestätigen den Gruppennamen ein:",
+    "groupNameField": "Gruppenname",
+    "title": "Gruppe löschen"
+  },
+  "DeleteGroupNotice": {
+    "description": "Diese Gruppe wurde zur Löschung vorgemerkt und wird am {date} endgültig gelöscht. Wenn du diese Gruppe reaktivieren möchtest, klicke auf die Schaltfläche unten.",
+    "restore": "Gruppe wiederherstellen",
+    "title": "Zur Löschung vorgemerkte Gruppe"
+  },
+  "FileImport": {
+    "analysisAwaiting": "Warte auf Datei-Analyse…",
+    "analysisCategoryTitle": "Kategorie-Zuordnungswarnungen",
+    "analysisErrorsTitle": "Zeilenfehler",
+    "analysisExplanation": "Wähle eine Datei, um sie vor dem Import zu analysieren.",
+    "analysisFatalHint": "Behebe diese Fehler, um den Import zu aktivieren.",
+    "analysisGeneralWarningsTitle": "Allgemeine Warnungen",
+    "analysisHeaderTitle": "Probleme im Header",
+    "buttonLabel": "Import-Dialog öffnen",
+    "errorTitle": "Fehler",
+    "fileLabel": "Datei auswählen",
+    "fileReadError": "Die ausgewählte Datei konnte nicht gelesen werden.",
+    "generalInfoFormat": "Format",
+    "generalInfoInvalidRows": "Ungültige Zeilen",
+    "generalInfoParticipants": "Teilnehmer und Salden",
+    "generalInfoParticipantsEmpty": "Keine Teilnehmerinformationen erkannt.",
+    "generalInfoRows": "Zeilen",
+    "generalInfoTitle": "Allgemeine Informationen",
+    "generalInfoTotal": "Gesamtbetrag",
+    "generalInfoUnknown": "Unbekannt",
+    "import": "Importieren",
+    "importCancel": "Import abbrechen",
+    "importCanceling": "Breche ab…",
+    "importProgressLabel": "Importiere Ausgaben",
+    "importResultCancelledSimple": "Import abgebrochen",
+    "importResultCompleted": "{created} von {total} Zeilen importiert",
+    "importResultConfirm": "Weiter",
+    "importing": "Importiere…",
+    "newGroupNameLabel": "Name der neuen Gruppe",
+    "newGroupNamePlaceholder": "Gruppennamen eingeben (optional)",
+    "previewErrorTitle": "Die Datei konnte nicht analysiert werden",
+    "processing": "Verarbeite…",
+    "title": "Gruppe aus Datei importieren",
+    "uploadDragDescription": "Unterstützt: JSON (Spliit-JSON) und Debug-Dateien",
+    "uploadDragTitle": "Datei hier ablegen oder klicken, um auszuwählen"
+  },
+  "FileImportErrors": {
+    "fileEmpty": "Die hochgeladene Datei war leer.",
+    "invalidAmount": "Ungültiger Betrag in einer oder mehreren Zeilen.",
+    "invalidDate": "Ungültiges Ausgabedatum in einer oder mehreren Zeilen.",
+    "noParticipants": "Keine Teilnehmer in der Datei definiert."
+  },
+  "SyncErrors": {
+    "auth": {
+      "required": "Du musst angemeldet sein, um diese Aktion auszuführen"
+    },
+    "notSynced": "Gruppe ist nicht synchronisiert",
+    "toast": {
+      "archiveFailed": "Archivstatus konnte nicht mit der Cloud synchronisiert werden",
+      "saveLocalFailed": "Gruppe lokal gespeichert, aber nicht mit der Cloud synchronisiert",
+      "starFailed": "Favoritenstatus konnte nicht mit der Cloud synchronisiert werden",
+      "title": "Synchronisierung fehlgeschlagen",
+      "unarchiveFailed": "Wiederherstellung konnte nicht mit der Cloud synchronisiert werden",
+      "unstarFailed": "Entfernen des Favoritenstatus konnte nicht mit der Cloud synchronisiert werden"
+    },
+    "validation": {
+      "invalidParticipant": "Ungültiger Teilnehmer für diese Gruppe",
+      "invalidParticipantForGroup": "Ungültiger Teilnehmer für Gruppe {groupId}",
+      "maxGroups": "Maximal 100 Gruppen pro Anfrage",
+      "tooManyGroups": "Es können nicht mehr als {max} Gruppen gleichzeitig synchronisiert werden"
+    }
+  }
+}
