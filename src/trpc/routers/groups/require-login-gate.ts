@@ -1,6 +1,5 @@
 import { auth } from '@/lib/auth'
-import { env } from '@/lib/env'
-import { getInstanceSettings } from '@/lib/instance-settings'
+import { isGroupCreationAllowed } from '@/lib/fork/group-creation'
 import { TRPCError } from '@trpc/server'
 
 /**
@@ -22,19 +21,15 @@ import { TRPCError } from '@trpc/server'
  * self-hosted, low-traffic scale.
  */
 export async function assertGroupCreationAllowed(req: Request) {
-  if (env.OIDC_PROVIDERS.length === 0) return
+  // Same predicate the groups list and the create page use, with this
+  // context's own session source - see @/lib/fork/group-creation.
+  if (await isGroupCreationAllowed(() => auth(req))) return
 
-  const { requireLoginToCreateGroups } = await getInstanceSettings()
-  if (!requireLoginToCreateGroups) return
-
-  const session = await auth(req)
-  if (!session?.user?.id) {
-    // Not translated - server-side thrown error messages aren't translated
-    // anywhere else in this codebase either (see protectedProcedure's own
-    // comment on this in sync/protected.ts).
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'You must be logged in to create a new group',
-    })
-  }
+  // Not translated - server-side thrown error messages aren't translated
+  // anywhere else in this codebase either (see protectedProcedure's own
+  // comment on this in sync/protected.ts).
+  throw new TRPCError({
+    code: 'UNAUTHORIZED',
+    message: 'You must be logged in to create a new group',
+  })
 }
