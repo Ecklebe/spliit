@@ -2,9 +2,6 @@
 
 # dependencies
 /node_modules
-# Root-owned leftover from a pre-merge `sudo npm install`; see the merge notes.
-# Safe to delete with `sudo rm -rf .node_modules-premerge`.
-/.node_modules-premerge
 /.pnp
 .pnp.js
 .yarn/install-state.gz
