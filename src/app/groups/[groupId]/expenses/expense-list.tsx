@@ -4,6 +4,7 @@ import { getGroupExpensesAction } from '@/app/groups/[groupId]/expenses/expense-
 import { Button } from '@/components/ui/button'
 import { SearchBar } from '@/components/ui/search-bar'
 import { Skeleton } from '@/components/ui/skeleton'
+import { getWeekStartsOn } from '@/lib/date-groups'
 import {
   groupExpensesByCalendarMonth,
   groupExpensesByRelativeDate,
@@ -99,6 +100,7 @@ const ExpenseListForSearch = ({
     if (inView && hasMore && !isLoading) fetchNextPage()
   }, [fetchNextPage, hasMore, inView, isLoading])
 
+  const weekStartsOn = getWeekStartsOn(locale)
   const expenseDateGroups = useMemo(() => {
     if (!expenses || !group) return []
     if (group.fixedExpenseDateGroups) {
@@ -107,8 +109,8 @@ const ExpenseListForSearch = ({
         locale,
       })
     }
-    return groupExpensesByRelativeDate(expenses)
-  }, [expenses, group, locale, t])
+    return groupExpensesByRelativeDate(expenses, weekStartsOn)
+  }, [expenses, group, locale, t, weekStartsOn])
 
   if (isLoading) return <ExpensesLoading />
 

@@ -2,19 +2,38 @@
 
 import { env } from './env'
 
+const parseFlag = (val: string | undefined) =>
+  ['true', 'yes', '1', 'on'].includes((val ?? '').trim().toLowerCase())
+
 export async function getRuntimeFeatureFlags() {
+  // The ENABLE_* vars are read from process.env on every call rather than from
+  // the module-level `env` snapshot, which is parsed once at import. In a
+  // long-running server the two are the same; reading live keeps this correct
+  // if the module is ever imported before the environment is complete.
+  //
+  // env.NEXT_PUBLIC_* are read from the snapshot on purpose: Next.js inlines
+  // them at build time, so the snapshot *is* the build-time value, which is the
+  // right answer for a self-built image.
   return {
-    enableExpenseDocuments: env.NEXT_PUBLIC_ENABLE_EXPENSE_DOCUMENTS,
-    enableReceiptExtract: env.NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT,
-    enableCategoryExtract: env.NEXT_PUBLIC_ENABLE_CATEGORY_EXTRACT,
+    enableExpenseDocuments:
+      parseFlag(process.env.ENABLE_EXPENSE_DOCUMENTS) ||
+      env.NEXT_PUBLIC_ENABLE_EXPENSE_DOCUMENTS,
+    enableReceiptExtract:
+      parseFlag(process.env.ENABLE_RECEIPT_EXTRACT) ||
+      env.NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT,
+    enableCategoryExtract:
+      parseFlag(process.env.ENABLE_CATEGORY_EXTRACT) ||
+      env.NEXT_PUBLIC_ENABLE_CATEGORY_EXTRACT,
     // Login/sync is fully hidden (no nav link, no sign-in UI, no sync
     // banner) unless at least one OIDC provider is configured - see
-    // env.ts's oidcProviders for how providers get registered.
+    // env.ts's oidcProviders for how providers get registered. Read from the
+    // parsed snapshot rather than process.env: OIDC_PROVIDERS is a derived,
+    // validated list, not a raw string.
     enableLogin: env.OIDC_PROVIDERS.length > 0,
     // /admin (read-only instance stats), like Traefik's own /dashboard
     // entrypoint - off by default, independent of enableLogin. Actual
     // access still requires an OIDC "admin" role grant (see admin/page.tsx).
-    enableAdmin: env.ENABLE_ADMIN,
+    enableAdmin: parseFlag(process.env.ENABLE_ADMIN) || env.ENABLE_ADMIN,
   }
 }
 

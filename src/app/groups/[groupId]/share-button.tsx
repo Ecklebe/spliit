@@ -9,8 +9,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { Group } from '@/generated/prisma/browser'
 import { useBaseUrl } from '@/lib/hooks'
-import { Group } from '@prisma/client'
 import { Share } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -35,10 +35,11 @@ export function ShareButton({ group }: Props) {
         {url && (
           <div className="flex gap-2">
             <Input className="flex-1" defaultValue={url} readOnly />
-            <CopyButton text={url} />
+            <CopyButton text={url} title={t('copyLink')} />
             <ShareUrlButton
               text={`Join my group ${group.name} on Spliit`}
               url={url}
+              title={t('shareLink')}
             />
             <ShareQrCodeDialog url={url} groupName={group.name} />
           </div>

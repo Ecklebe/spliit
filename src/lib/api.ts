@@ -1,18 +1,17 @@
-import { prisma } from '@/lib/prisma'
-import { ExpenseFormValues, GroupFormValues } from '@/lib/schemas'
 import {
   ActivityType,
   Expense,
   ExpenseComment,
   RecurrenceRule,
   RecurringExpenseLink,
-} from '@prisma/client'
+} from '@/generated/prisma/client'
+import { prisma } from '@/lib/prisma'
+import { randomId } from '@/lib/random'
+import { ExpenseFormValues, GroupFormValues } from '@/lib/schemas'
 import { calculateNextDate } from './recurring-expenses'
 
-export function randomId(size?: number) {
-  const id = crypto.randomUUID().replaceAll('-', '')
-  return size ? id.slice(0, size) : id
-}
+// Re-exported for backwards compatibility with existing server-side importers.
+export { randomId }
 
 export async function createGroup(groupFormValues: GroupFormValues) {
   return prisma.group.create({
@@ -474,6 +473,8 @@ export async function getGroupExpenses(
       expenseDate: true,
       id: true,
       isReimbursement: true,
+      originalAmount: true,
+      originalCurrency: true,
       paidBy: { select: { id: true, name: true } },
       paidFor: {
         select: {
@@ -500,6 +501,37 @@ export async function getGroupExpenses(
 
 export async function getGroupExpenseCount(groupId: string) {
   return prisma.expense.count({ where: { groupId } })
+}
+
+/**
+ * Returns the currently active recurring expenses of a group: the latest frame
+ * of every ongoing recurring series. Each materialized frame keeps its own
+ * `recurringExpenseLink`, but only the current frame's link is still "open"
+ * (`nextExpenseCreatedAt` is null) — past frames have it set once their
+ * successor is created (see `createRecurringExpenses`). Filtering on the open
+ * link ensures a single subscription is counted only once. Used for recurring
+ * stats (#508).
+ */
+export async function getActiveRecurringExpenses(groupId: string) {
+  await createRecurringExpenses()
+
+  return prisma.expense.findMany({
+    select: {
+      id: true,
+      title: true,
+      amount: true,
+      category: true,
+      recurrenceRule: true,
+      isReimbursement: true,
+    },
+    where: {
+      groupId,
+      isReimbursement: false,
+      recurrenceRule: { not: RecurrenceRule.NONE },
+      recurringExpenseLink: { is: { nextExpenseCreatedAt: null } },
+    },
+    orderBy: { amount: 'desc' },
+  })
 }
 
 export async function getExpense(groupId: string, expenseId: string) {

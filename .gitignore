@@ -40,17 +40,21 @@ next-env.d.ts
 # db
 postgres-data
 
-# Playwright
-node_modules/
+# prisma generated client (regenerated via `prisma generate`)
+/src/generated
+
+# playwright
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
 
+# performance suite output (perf/run.ts)
+/perf-report.json
+
+# agent tooling
 .agents
 .opencode
 openspec
-
-# Email
-/.mail/
+.node_modules-premerge/

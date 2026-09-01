@@ -7,7 +7,7 @@ export async function generateMetadata() {
 
   return {
     title: t('Expense.edit'),
-  };
+  }
 }
 
 export default async function EditExpensePage({

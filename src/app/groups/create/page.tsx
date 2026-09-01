@@ -9,8 +9,8 @@ export async function generateMetadata() {
   const t = await getTranslations('Groups')
 
   return {
-    title: t('NoRecent.create'),
-  };
+    title: t('createGroup'),
+  }
 }
 
 export default async function CreateGroupPage() {
@@ -25,5 +25,7 @@ export default async function CreateGroupPage() {
     }
   }
 
-  return <CreateGroup />
+  const defaultCurrencyCode =
+    env.DEFAULT_CURRENCY_CODE ?? env.NEXT_PUBLIC_DEFAULT_CURRENCY_CODE ?? 'USD'
+  return <CreateGroup defaultCurrencyCode={defaultCurrencyCode} />
 }
