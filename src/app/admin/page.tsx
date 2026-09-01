@@ -28,14 +28,19 @@ export default async function AdminPage() {
 
   const t = await getTranslations('Admin')
 
-  const [groupCount, participantCount, expenseCount, userCount, syncedGroupCount] =
-    await Promise.all([
-      prisma.group.count(),
-      prisma.participant.count(),
-      prisma.expense.count(),
-      prisma.user.count(),
-      prisma.syncedGroup.count(),
-    ])
+  const [
+    groupCount,
+    participantCount,
+    expenseCount,
+    userCount,
+    syncedGroupCount,
+  ] = await Promise.all([
+    prisma.group.count(),
+    prisma.participant.count(),
+    prisma.expense.count(),
+    prisma.user.count(),
+    prisma.syncedGroup.count(),
+  ])
 
   const stats = [
     { label: t('stats.groups'), value: groupCount },

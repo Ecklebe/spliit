@@ -6,7 +6,7 @@ export async function generateMetadata() {
 
   return {
     title: t('title'),
-  };
+  }
 }
 
 export default async function GroupPage() {

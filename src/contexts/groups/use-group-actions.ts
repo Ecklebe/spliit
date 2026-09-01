@@ -51,8 +51,7 @@ export function useGroupActions(): GroupActions {
 
       // 2. Auto-sync if conditions met
       const prefs = preferencesQuery.data as
-        | { syncNewGroups?: boolean }
-        | undefined
+        { syncNewGroups?: boolean } | undefined
       if (
         sessionStatus === 'authenticated' &&
         prefs?.syncNewGroups &&

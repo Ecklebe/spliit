@@ -1,6 +1,7 @@
 {
   "Homepage": {
     "title": "Share <strong>Expenses</strong> with <strong>Friends & Family</strong>",
+    "metaTitle": "Spliit · Share Expenses with Friends & Family",
     "description": "Welcome to your new <strong>Spliit</strong> instance !",
     "button": {
       "groups": "Go to groups",
@@ -9,8 +10,8 @@
   },
   "Header": {
     "groups": "Groups",
-    "settings": "Settings",
-    "login": "Login"
+    "login": "Login",
+    "settings": "Settings"
   },
   "Footer": {
     "madeIn": "Made in Montréal, Québec 🇨🇦",
@@ -54,26 +55,21 @@
   "Groups": {
     "myGroups": "My groups",
     "create": "Create",
+    "createGroup": "Create group",
     "loadingRecent": "Loading recent groups…",
-    "CreateOptions": {
-      "openMenu": "Open create options",
-      "newGroup": "New group",
-      "importFromFile": "Import from file"
-    },
-    "ImportDialog": {
-      "successTitle": "Group created",
-      "successDescription": "Group {name} was created from import."
-    },
-    "CreateErrors": {
-      "sessionExpiredTitle": "Could not create group",
-      "sessionExpiredDescription": "This instance now requires signing in to create new groups. Please sign in and try again."
-    },
     "NoRecent": {
       "description": "You have not visited any group recently.",
       "create": "Create one",
       "orAsk": "or ask a friend to send you the link to an existing one.",
       "enableCloudSync": "Enable cloud sync",
       "enableCloudSyncHelp": "to access your groups across devices."
+    },
+    "GlobalBalance": {
+      "title": "Your total balance",
+      "description": "Your combined balance across all your groups.",
+      "owedToYou": "You are owed",
+      "youOwe": "You owe",
+      "settledUp": "You are all settled up across your groups."
     },
     "recent": "Recent groups",
     "starred": "Starred groups",
@@ -103,30 +99,43 @@
         "permissionError": "Unable to access camera. Please check permissions."
       }
     },
-    "Card": {
-      "actions": {
-        "unsyncTooltip": "Unsync from cloud",
-        "syncTooltip": "Sync to cloud",
-        "unfavoriteTooltip": "Remove from favorites",
-        "favoriteTooltip": "Add to favorites"
-      },
-      "toast": {
-        "unsyncRemoved": {
-          "title": "Group removed and unsynced",
-          "description": "The group has been removed from this device and unsynced from your account"
-        }
-      },
-      "unsyncDialog": {
-        "title": "Remove synced group",
-        "description": "This group is synced to your account. What would you like to do?",
-        "actions": {
-          "removeAndUnsync": "Remove and unsync"
-        }
-      }
-    },
     "NotFound": {
       "text": "This group does not exist.",
       "link": "Go to recently visited groups"
+    },
+    "Card": {
+      "actions": {
+        "favoriteTooltip": "Add to favorites",
+        "syncTooltip": "Sync to cloud",
+        "unfavoriteTooltip": "Remove from favorites",
+        "unsyncTooltip": "Unsync from cloud"
+      },
+      "toast": {
+        "unsyncRemoved": {
+          "description": "The group has been removed from this device and unsynced from your account",
+          "title": "Group removed and unsynced"
+        }
+      },
+      "unsyncDialog": {
+        "actions": {
+          "removeAndUnsync": "Remove and unsync"
+        },
+        "description": "This group is synced to your account. What would you like to do?",
+        "title": "Remove synced group"
+      }
+    },
+    "CreateErrors": {
+      "sessionExpiredDescription": "This instance now requires signing in to create new groups. Please sign in and try again.",
+      "sessionExpiredTitle": "Could not create group"
+    },
+    "CreateOptions": {
+      "importFromFile": "Import from file",
+      "newGroup": "New group",
+      "openMenu": "Open create options"
+    },
+    "ImportDialog": {
+      "successDescription": "Group {name} was created from import.",
+      "successTitle": "Group created"
     }
   },
   "GroupForm": {
@@ -161,14 +170,6 @@
       "Jane": "Jane",
       "Jack": "Jack"
     },
-    "GroupSettings": {
-      "title": "Group settings",
-      "description": "These settings are shared with everyone who uses this group.",
-      "FixedExpenseDateGroupsField": {
-        "label": "Group expenses by calendar month",
-        "description": "Useful for recurring monthly expenses for roommates and shared bills."
-      }
-    },
     "Settings": {
       "title": "Local settings",
       "description": "These settings are set per-device, and are used to customize your experience.",
@@ -185,19 +186,17 @@
       "cancel": "Cancel"
     },
     "Delete": {
-      "title": "Delete group",
-      "description": "Deleting a group will result in a 30 days deactivation period, after which all data will be permanently deleted and unrecoverable."
+      "description": "Deleting a group will result in a 30 days deactivation period, after which all data will be permanently deleted and unrecoverable.",
+      "title": "Delete group"
+    },
+    "GroupSettings": {
+      "FixedExpenseDateGroupsField": {
+        "description": "Useful for recurring monthly expenses for roommates and shared bills.",
+        "label": "Group expenses by calendar month"
+      },
+      "description": "These settings are shared with everyone who uses this group.",
+      "title": "Group settings"
     }
-  },
-  "DeleteGroupButton": {
-    "title": "Delete group",
-    "description": "Do you really want to delete this group? To confirm, please enter the group name below.",
-    "groupNameField": "Group name"
-  },
-  "DeleteGroupNotice": {
-    "title": "Group scheduled for deletion",
-    "description": "This group was scheduled for deletion and will be permanently deleted on {date}. If you want to restore it, click the button below.",
-    "restore": "Restore group"
   },
   "ExpenseForm": {
     "Income": {
@@ -253,7 +252,6 @@
       "recurrenceRule": {
         "label": "Expense Recurrence",
         "description": "Select how often the expense should repeat.",
-
         "none": "None",
         "daily": "Daily",
         "weekly": "Weekly",
@@ -271,7 +269,9 @@
     },
     "conversionUnavailable": "To set a different currency per expense and convert amounts, select a non-custom currency for the group.",
     "originalAmountField": {
-      "label": "Amount to convert"
+      "label": "Amount to convert",
+      "repaymentLabel": "Amount to transfer",
+      "repaymentDescription": "Converted from the amount above, which is what settles the balance."
     },
     "conversionRateField": {
       "useApi": "Use rates from Frankfurter",
@@ -319,28 +319,15 @@
       "cancel": "Cancel"
     },
     "attachDocuments": "Attach documents",
-    "location": "Location",
-    "locationDescription": "Where was this made?",
     "create": "Create",
     "creating": "Creating…",
     "save": "Save",
     "saving": "Saving…",
     "cancel": "Cancel",
-    "reimbursement": "Reimbursement"
+    "reimbursement": "Reimbursement",
+    "location": "Location",
+    "locationDescription": "Where was this made?"
   },
-  "ExpenseComments": {
-      "title": "Comments",
-      "noComments": "This expense does not contain any comments yet.",
-      "noActiveParticipant": "Select an active participant to add and edit comments",
-      "addComment": "Add Comment",
-      "editComment": "Edit Comment",
-      "commentPlaceholder": "Enter your comment",
-      "addCaption": "Add Comment",
-      "addingCaption": "Adding",
-      "saveCaption": "Save Comment",
-      "savingCaption": "Saving",
-      "cancel": "Cancel"
-    },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
       "title": "The file is too big",
@@ -390,6 +377,16 @@
   },
   "Stats": {
     "title": "Stats",
+    "range": {
+      "label": "Period",
+      "all": "All time",
+      "thisMonth": "This month",
+      "last30": "Last 30 days",
+      "thisYear": "This year",
+      "custom": "Custom range",
+      "from": "From",
+      "to": "To"
+    },
     "Totals": {
       "title": "Totals",
       "description": "Spending summary of the entire group.",
@@ -399,40 +396,49 @@
       "yourEarnings": "Your total earnings",
       "yourShare": "Your total share"
     },
-    "MonthlySpending": {
-      "title": "Monthly spending",
-      "description": "Spending by month and category.",
-      "rangeLabel": "Range",
-      "groupingLabel": "Category grouping",
-      "chartTypeLabel": "Chart type",
-      "stackedTitle": "Monthly categories",
-      "breakdownTitle": "{range} category breakdown",
-      "balanceTimelineTitle": "Balance timeline",
-      "categoryMarkers": "Category markers",
-      "isOwedMoney": "Is owed money",
-      "owesMoney": "Owes money",
-      "payment": "Reimbursement",
-      "roundAmountsLabel": "Round amounts",
-      "stackOrderLabel": "Stack order",
-      "income": "Income",
-      "noData": "No spending data yet.",
-      "ChartTypes": {
-        "bars": "Stacked bars",
-        "columns": "Stacked columns"
-      },
-      "StackOrders": {
-        "smallInside": "Smaller debt inside",
-        "smallOutside": "Smaller debt outside"
-      },
-      "RangeOptions": {
-        "three": "3 months",
-        "six": "6 months",
-        "twelve": "12 months",
-        "all": "All"
-      },
-      "GroupingOptions": {
-        "categoryGroup": "Categories",
-        "category": "Detailed"
+    "Summary": {
+      "title": "Summary",
+      "description": "Key figures for the selected period.",
+      "empty": "There are no expenses yet.",
+      "expenseCount": "Expenses",
+      "averageExpense": "Average expense",
+      "largestExpense": "Largest expense",
+      "activeSpan": "Active period"
+    },
+    "OverTime": {
+      "title": "Spending over time",
+      "description": "Total group spending per month. Select a month to see its expenses.",
+      "empty": "There are no expenses yet.",
+      "showExpenses": "Show expenses for {month}",
+      "detailsDescription": "Expenses in this month for the selected period.",
+      "detailsEmpty": "There are no expenses in this month."
+    },
+    "ByParticipant": {
+      "title": "Spending by participant",
+      "description": "How much each participant paid and their share of the expenses.",
+      "empty": "There are no expenses yet.",
+      "participant": "Participant",
+      "paid": "Paid",
+      "count": "Count",
+      "share": "Share"
+    },
+    "ByCategory": {
+      "title": "Spending by category",
+      "description": "Total amount spent in each category. Select a category to see its expenses.",
+      "empty": "There are no expenses yet.",
+      "showExpenses": "Show expenses for {category}",
+      "detailsDescription": "Expenses in this category for the selected period.",
+      "detailsEmpty": "There are no expenses in this category."
+    },
+    "Recurring": {
+      "title": "Recurring expenses",
+      "description": "Estimated cost of the group's active recurring expenses.",
+      "estimatedMonthly": "Estimated monthly cost",
+      "estimatedYearly": "{amount} per year",
+      "period": {
+        "DAILY": "{count, plural, one {# daily expense} other {# daily expenses}}",
+        "WEEKLY": "{count, plural, one {# weekly expense} other {# weekly expenses}}",
+        "MONTHLY": "{count, plural, one {# monthly expense} other {# monthly expenses}}"
       }
     }
   },
@@ -464,59 +470,61 @@
   },
   "Settings": {
     "title": "Settings",
-    "sections": {
-      "account": "Account",
-      "preferences": "Preferences",
-      "actions": "Actions",
-      "syncedGroups": "Synced Groups"
+    "Account": {
+      "signOut": "Sign out",
+      "signOutDialog": {
+        "clearGroups": "Yes, clear groups",
+        "description": "Do you want to clear synced groups from this device?",
+        "keepGroups": "No, keep groups"
+      },
+      "signedInAs": "Signed in as"
     },
     "CloudSync": {
-      "title": "Cloud Sync",
       "description": {
         "signedIn": "Manage your synced groups and preferences",
         "signedOut": "Sign in to sync your groups across devices"
-      }
+      },
+      "title": "Cloud Sync"
     },
     "SignIn": {
-      "signInWith": "Sign in with {provider}",
-      "none": "No sign-in providers are configured for this instance."
+      "none": "No sign-in providers are configured for this instance.",
+      "signInWith": "Sign in with {provider}"
     },
-    "Account": {
-      "signedInAs": "Signed in as",
-      "signOut": "Sign out",
-      "signOutDialog": {
-        "description": "Do you want to clear synced groups from this device?",
-        "keepGroups": "No, keep groups",
-        "clearGroups": "Yes, clear groups"
+    "SyncAll": {
+      "actions": {
+        "syncNow": "Sync all groups now",
+        "syncing": "Syncing..."
+      },
+      "result": {
+        "skipped": "Skipped {count} group(s)",
+        "synced": "Synced {count} group(s)"
       }
     },
     "SyncPreferences": {
       "syncNewGroups": {
-        "label": "Sync new groups automatically",
-        "description": "Automatically sync when visiting or creating groups"
-      }
-    },
-    "SyncAll": {
-      "actions": {
-        "syncing": "Syncing...",
-        "syncNow": "Sync all groups now"
-      },
-      "result": {
-        "synced": "Synced {count} group(s)",
-        "skipped": "Skipped {count} group(s)"
+        "description": "Automatically sync when visiting or creating groups",
+        "label": "Sync new groups automatically"
       }
     },
     "SyncedGroups": {
-      "empty": "No synced groups yet",
-      "count": "{count} group(s) synced to the cloud",
       "actions": {
         "unsync": "Unsync"
-      }
+      },
+      "count": "{count} group(s) synced to the cloud",
+      "empty": "No synced groups yet"
+    },
+    "sections": {
+      "account": "Account",
+      "actions": "Actions",
+      "preferences": "Preferences",
+      "syncedGroups": "Synced Groups"
     }
   },
   "Share": {
     "title": "Share",
     "description": "For other participants to see the group and add expenses, share its URL with them.",
+    "copyLink": "Copy link",
+    "shareLink": "Share link",
     "warning": "Warning!",
     "warningHelp": "Every person with the group URL will be able to see and edit expenses. Share with caution!",
     "qrCode": {
@@ -625,98 +633,125 @@
       "heading": "Other currencies"
     }
   },
-  "Common": {
-    "loading": "Loading...",
-    "syncing": "Syncing..."
+  "Pwa": {
+    "updateTitle": "Update available",
+    "updateDescription": "A new version of Spliit is available.",
+    "reload": "Reload"
+  },
+  "Admin": {
+    "description": "Read-only overview of this instance.",
+    "requireLoginToggle": {
+      "description": "When enabled, only signed-in users can create new groups. Existing groups remain accessible to everyone via their link - this only affects new group creation.",
+      "errorTitle": "Could not update setting",
+      "label": "Require login to create groups"
+    },
+    "stats": {
+      "expenses": "Expenses",
+      "groups": "Groups",
+      "participants": "Participants",
+      "signedInUsers": "Signed-in Users",
+      "syncedGroups": "Synced Groups"
+    },
+    "title": "Admin"
   },
   "AuthError": {
-    "title": "Authentication Error",
-    "subtitle": "Unable to sign you in",
+    "actions": {
+      "goToSettings": "Go to Settings"
+    },
     "messages": {
       "configuration": "Authentication configuration error. Please contact support.",
       "default": "An authentication error occurred. Please try again."
     },
-    "actions": {
-      "goToSettings": "Go to Settings"
-    }
+    "subtitle": "Unable to sign you in",
+    "title": "Authentication Error"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "syncing": "Syncing..."
+  },
+  "DeleteGroupButton": {
+    "description": "Do you really want to delete this group? To confirm, please enter the group name below.",
+    "groupNameField": "Group name",
+    "title": "Delete group"
+  },
+  "DeleteGroupNotice": {
+    "description": "This group was scheduled for deletion and will be permanently deleted on {date}. If you want to restore it, click the button below.",
+    "restore": "Restore group",
+    "title": "Group scheduled for deletion"
+  },
+  "ExpenseComments": {
+    "addCaption": "Add Comment",
+    "addComment": "Add Comment",
+    "addingCaption": "Adding",
+    "cancel": "Cancel",
+    "commentPlaceholder": "Enter your comment",
+    "editComment": "Edit Comment",
+    "noActiveParticipant": "Select an active participant to add and edit comments",
+    "noComments": "This expense does not contain any comments yet.",
+    "saveCaption": "Save Comment",
+    "savingCaption": "Saving",
+    "title": "Comments"
+  },
+  "FileImport": {
+    "analysisAwaiting": "Awaiting file analysis…",
+    "analysisCategoryTitle": "Category mapping warnings",
+    "analysisErrorsTitle": "Row errors",
+    "analysisExplanation": "Select a file to analyze its content before importing.",
+    "analysisFatalHint": "Fix these errors to enable import.",
+    "analysisGeneralWarningsTitle": "General warnings",
+    "analysisHeaderTitle": "Header issues",
+    "buttonLabel": "Open import dialog",
+    "errorTitle": "Error",
+    "fileLabel": "Select a file",
+    "fileReadError": "Could not read the selected file.",
+    "generalInfoFormat": "Format",
+    "generalInfoInvalidRows": "Invalid rows",
+    "generalInfoParticipants": "Participants and balances",
+    "generalInfoParticipantsEmpty": "No participant information detected.",
+    "generalInfoRows": "Rows",
+    "generalInfoTitle": "General information",
+    "generalInfoTotal": "Total amount",
+    "generalInfoUnknown": "Unknown",
+    "import": "Import",
+    "importCancel": "Cancel import",
+    "importCanceling": "Cancelling…",
+    "importProgressLabel": "Importing expenses",
+    "importResultCancelledSimple": "Import cancelled",
+    "importResultCompleted": "Imported {created} of {total} rows",
+    "importResultConfirm": "Continue",
+    "importing": "Importing…",
+    "newGroupNameLabel": "New group name",
+    "newGroupNamePlaceholder": "Enter a group name (optional)",
+    "previewErrorTitle": "We couldn't analyze your file",
+    "processing": "Processing…",
+    "title": "Import group from file",
+    "uploadDragDescription": "Supported: JSON (Spliit-JSON) and debug files",
+    "uploadDragTitle": "Drop a file here or click to select"
+  },
+  "FileImportErrors": {
+    "fileEmpty": "The uploaded file was empty.",
+    "invalidAmount": "Invalid amount in one or more rows.",
+    "invalidDate": "Invalid expense date in one or more rows.",
+    "noParticipants": "No participants defined in file."
   },
   "SyncErrors": {
-    "toast": {
-      "title": "Sync failed",
-      "saveLocalFailed": "Group saved locally but not synced to cloud",
-      "starFailed": "Failed to sync star status to cloud",
-      "unstarFailed": "Failed to sync unstar status to cloud",
-      "archiveFailed": "Failed to sync archive status to cloud",
-      "unarchiveFailed": "Failed to sync unarchive status to cloud"
-    },
     "auth": {
       "required": "You must be logged in to perform this action"
     },
+    "notSynced": "Group is not synced",
+    "toast": {
+      "archiveFailed": "Failed to sync archive status to cloud",
+      "saveLocalFailed": "Group saved locally but not synced to cloud",
+      "starFailed": "Failed to sync star status to cloud",
+      "title": "Sync failed",
+      "unarchiveFailed": "Failed to sync unarchive status to cloud",
+      "unstarFailed": "Failed to sync unstar status to cloud"
+    },
     "validation": {
-      "maxGroups": "Maximum 100 groups per request",
       "invalidParticipant": "Invalid participant for this group",
       "invalidParticipantForGroup": "Invalid participant for group {groupId}",
+      "maxGroups": "Maximum 100 groups per request",
       "tooManyGroups": "Cannot sync more than {max} groups at once"
-    },
-    "notSynced": "Group is not synced"
-  }
-  ,
-  "FileImport": {
-    "title": "Import group from file",
-    "buttonLabel": "Open import dialog",
-    "errorTitle": "Error",
-    "processing": "Processing…",
-    "fileLabel": "Select a file",
-    "uploadDragTitle": "Drop a file here or click to select",
-    "uploadDragDescription": "Supported: JSON (Spliit-JSON) and debug files",
-    "fileReadError": "Could not read the selected file.",
-    "newGroupNameLabel": "New group name",
-    "newGroupNamePlaceholder": "Enter a group name (optional)",
-    "analysisAwaiting": "Awaiting file analysis…",
-    "analysisExplanation": "Select a file to analyze its content before importing.",
-    "previewErrorTitle": "We couldn't analyze your file",
-    "generalInfoTitle": "General information",
-    "generalInfoFormat": "Format",
-    "generalInfoRows": "Rows",
-    "generalInfoInvalidRows": "Invalid rows",
-    "generalInfoTotal": "Total amount",
-    "generalInfoParticipants": "Participants and balances",
-    "generalInfoParticipantsEmpty": "No participant information detected.",
-    "generalInfoUnknown": "Unknown",
-    "analysisHeaderTitle": "Header issues",
-    "analysisGeneralWarningsTitle": "General warnings",
-    "analysisCategoryTitle": "Category mapping warnings",
-    "analysisErrorsTitle": "Row errors",
-    "analysisFatalHint": "Fix these errors to enable import.",
-    "import": "Import",
-    "importing": "Importing…",
-    "importProgressLabel": "Importing expenses",
-    "importCancel": "Cancel import",
-    "importCanceling": "Cancelling…",
-    "importResultCompleted": "Imported {created} of {total} rows",
-    "importResultCancelledSimple": "Import cancelled",
-    "importResultConfirm": "Continue"
-  },
-  "FileImportErrors": {
-    "noParticipants": "No participants defined in file.",
-    "fileEmpty": "The uploaded file was empty.",
-    "invalidAmount": "Invalid amount in one or more rows.",
-    "invalidDate": "Invalid expense date in one or more rows."
-  },
-  "Admin": {
-    "title": "Admin",
-    "description": "Read-only overview of this instance.",
-    "stats": {
-      "groups": "Groups",
-      "participants": "Participants",
-      "expenses": "Expenses",
-      "signedInUsers": "Signed-in Users",
-      "syncedGroups": "Synced Groups"
-    },
-    "requireLoginToggle": {
-      "label": "Require login to create groups",
-      "description": "When enabled, only signed-in users can create new groups. Existing groups remain accessible to everyone via their link - this only affects new group creation.",
-      "errorTitle": "Could not update setting"
     }
   }
 }

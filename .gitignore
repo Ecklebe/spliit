@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+# Root-owned leftover from a pre-merge `sudo npm install`; see the merge notes.
+# Safe to delete with `sudo rm -rf .node_modules-premerge`.
+/.node_modules-premerge
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -40,17 +43,20 @@ next-env.d.ts
 # db
 postgres-data
 
-# Playwright
-node_modules/
+# prisma generated client (regenerated via `prisma generate`)
+/src/generated
+
+# playwright
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
 
+# performance suite output (perf/run.ts)
+/perf-report.json
+
+# agent tooling
 .agents
 .opencode
 openspec
-
-# Email
-/.mail/

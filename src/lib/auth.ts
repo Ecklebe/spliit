@@ -38,7 +38,12 @@ function buildProviders() {
       // request outright otherwise - adding both checks explicitly keeps
       // this working across any configured provider, not just the lenient
       // ones.
-      return Zitadel({ clientId, clientSecret, issuer, checks: ['pkce', 'state'] })
+      return Zitadel({
+        clientId,
+        clientSecret,
+        issuer,
+        checks: ['pkce', 'state'],
+      })
     }
     return {
       id,

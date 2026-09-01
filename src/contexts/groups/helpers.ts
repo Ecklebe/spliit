@@ -96,7 +96,6 @@ export function persistToLocalStorage(data: GroupsData): void {
 export function isUnauthorizedError(error: unknown): boolean {
   return (
     error instanceof TRPCClientError &&
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (error as TRPCClientError<any>).data?.code === 'UNAUTHORIZED'
   )
 }

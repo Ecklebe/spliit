@@ -29,9 +29,15 @@ import { useEffect, useState } from 'react'
 type Props = {
   documents: ExpenseFormValues['documents']
   updateDocuments: (documents: ExpenseFormValues['documents']) => void
+  /** Called once per document successfully uploaded. */
+  onDocumentAttached?: () => void
 }
 
-export function ExpenseDocumentsInput({ documents, updateDocuments }: Props) {
+export function ExpenseDocumentsInput({
+  documents,
+  updateDocuments,
+  onDocumentAttached,
+}: Props) {
   const locale = useLocale()
   const t = useTranslations('ExpenseDocumentsInput')
   const [pending, setPending] = useState(false)
@@ -75,6 +81,7 @@ export function ExpenseDocumentsInput({ documents, updateDocuments }: Props) {
             height: created.height,
           },
         ])
+        onDocumentAttached?.()
       } catch (err) {
         console.error(err)
         toast({

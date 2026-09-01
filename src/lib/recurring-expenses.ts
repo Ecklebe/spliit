@@ -1,4 +1,4 @@
-import { RecurrenceRule } from '@prisma/client'
+import { RecurrenceRule } from '@/generated/prisma/client'
 
 // TODO: Modify this function to use a more comprehensive recurrence Rule library like rrule (https://github.com/jkbrzt/rrule)
 //

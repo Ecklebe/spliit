@@ -1,3 +1,10 @@
+/**
+ * These exercise server-side code (Prisma, tRPC callers, Request/Response), so
+ * they need Node's globals. Upstream's jest.config.ts defaults to jsdom for
+ * component tests; this overrides it per file.
+ *
+ * @jest-environment node
+ */
 // Relative paths, not the @/ alias: jest.mock()'s module-name resolution
 // doesn't go through the same moduleNameMapper substitution regular
 // imports do in this project's jest setup (see jest.config.ts's own

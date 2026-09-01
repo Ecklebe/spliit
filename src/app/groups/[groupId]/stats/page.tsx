@@ -6,7 +6,7 @@ export async function generateMetadata() {
 
   return {
     title: t('Totals.title'),
-  };
+  }
 }
 
 export default async function TotalsPage() {

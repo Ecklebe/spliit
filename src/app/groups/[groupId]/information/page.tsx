@@ -2,11 +2,11 @@ import GroupInformation from '@/app/groups/[groupId]/information/group-informati
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
-  const t = await getTranslations('GroupForm')
+  const t = await getTranslations('Information')
 
   return {
     title: t('title'),
-  };
+  }
 }
 
 export default async function InformationPage({

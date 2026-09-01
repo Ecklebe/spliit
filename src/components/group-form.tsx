@@ -1,3 +1,4 @@
+import { DeleteGroupButton } from '@/app/groups/[groupId]/delete-group-button'
 import { SortableParticipant } from '@/app/groups/[groupId]/edit/sortable-participants'
 import { SubmitButton } from '@/components/submit-button'
 import { Button } from '@/components/ui/button'
@@ -33,9 +34,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Locale } from '@/i18n/request'
+import { useAnalytics } from '@/lib/analytics/context'
 import { getGroup } from '@/lib/api'
 import { defaultCurrencyList, getCurrency } from '@/lib/currency'
-import { GroupFormValues, groupFormSchema } from '@/lib/schemas'
+import { GroupFormInput, GroupFormValues, groupFormSchema } from '@/lib/schemas'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -46,7 +48,6 @@ import { useEffect, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { CurrencySelector } from './currency-selector'
 import { Textarea } from './ui/textarea'
-import { DeleteGroupButton } from '@/app/groups/[groupId]/delete-group-button'
 
 export type Props = {
   group?: NonNullable<Awaited<ReturnType<typeof getGroup>>>
@@ -55,16 +56,19 @@ export type Props = {
     participantId?: string,
   ) => Promise<void>
   protectedParticipantIds?: string[]
+  /** Resolved on the server, since the runtime variable is not public. */
+  defaultCurrencyCode?: string
 }
 
 export function GroupForm({
   group,
   onSubmit,
   protectedParticipantIds = [],
+  defaultCurrencyCode = 'USD',
 }: Props) {
   const locale = useLocale()
   const t = useTranslations('GroupForm')
-  const form = useForm<GroupFormValues>({
+  const form = useForm<GroupFormInput, any, GroupFormValues>({
     resolver: zodResolver(groupFormSchema),
     defaultValues: group
       ? {
@@ -79,7 +83,7 @@ export function GroupForm({
           name: '',
           information: '',
           currency: '',
-          currencyCode: process.env.NEXT_PUBLIC_DEFAULT_CURRENCY_CODE || 'USD', // TODO: If NEXT_PUBLIC_DEFAULT_CURRENCY_CODE, is not set, determine the default currency code based on locale
+          currencyCode: defaultCurrencyCode, // TODO: derive from the locale when not configured
           fixedExpenseDateGroups: false,
           participants: [
             { name: t('Participants.John') },
@@ -93,6 +97,7 @@ export function GroupForm({
     name: 'participants',
     keyName: 'key',
   })
+  const sendEvent = useAnalytics()
 
   const [activeUser, setActiveUser] = useState<string | null>(null)
   useEffect(() => {
@@ -123,6 +128,14 @@ export function GroupForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(async (values) => {
+          if (group) {
+            sendEvent(
+              { event: 'group: update', props: {} },
+              `/groups/${group.id}/edit`,
+            )
+          } else {
+            sendEvent({ event: 'group: create', props: {} }, `/groups`)
+          }
           await onSubmit(
             values,
             group?.participants.find((p) => p.name === activeUser)?.id ??
@@ -448,16 +461,20 @@ export function GroupForm({
           )}
         </div>
 
-        {group && !group.deleteAt && (<Card className="border-red-700">
-          <CardHeader>
-            <CardTitle className="text-red-700">{t('Delete.title')}</CardTitle>
-            <CardDescription>{t('Delete.description')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {group && <DeleteGroupButton group={group} />}
-          </CardContent>
-        </Card>)}
-        </form>
+        {group && !group.deleteAt && (
+          <Card className="border-red-700">
+            <CardHeader>
+              <CardTitle className="text-red-700">
+                {t('Delete.title')}
+              </CardTitle>
+              <CardDescription>{t('Delete.description')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {group && <DeleteGroupButton group={group} />}
+            </CardContent>
+          </Card>
+        )}
+      </form>
     </Form>
   )
 }

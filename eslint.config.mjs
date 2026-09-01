@@ -10,8 +10,9 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
-    'postgres-data/**',
-    'node_modules/**',
+    // Prisma 7 emits the generated client here; it ships its own
+    // eslint-disable banners and should not be linted as project source.
+    'src/generated/**',
   ]),
   {
     rules: {

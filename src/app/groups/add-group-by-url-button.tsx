@@ -9,7 +9,7 @@ import {
 import { useGroupActions } from '@/contexts'
 import { useMediaQuery } from '@/lib/hooks'
 import { trpc } from '@/trpc/client'
-import { Loader2, Plus, QrCode, Link as LinkIcon } from 'lucide-react'
+import { Link as LinkIcon, Loader2, Plus, QrCode } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
@@ -26,12 +26,20 @@ export function AddGroupByUrlButton() {
   const utils = trpc.useUtils()
 
   const processUrl = async (urlToProcess: string) => {
-    const [, groupId] =
-      urlToProcess.match(
-        new RegExp(`${window.location.origin}/groups/([^/]+)`),
-      ) ??
-      urlToProcess.match(/\/groups\/([^/?]+)/) ?? // Also match relative URLs from QR
-      []
+    // Parse with the URL API rather than building a RegExp from
+    // window.location.origin, which is a regex-injection sink. Resolving
+    // against the current origin also lets a scanned QR carry a relative
+    // /groups/<id> link, while an absolute link keeps its own origin and so
+    // still fails the same-origin check below.
+    let groupId: string | undefined
+    try {
+      const parsed = new URL(urlToProcess, window.location.origin)
+      if (parsed.origin === window.location.origin) {
+        groupId = parsed.pathname.match(/^\/groups\/([^/]+)/)?.[1]
+      }
+    } catch {
+      // Unparseable input is treated as "not found" below.
+    }
 
     if (!groupId) {
       setError(true)
@@ -130,7 +138,12 @@ export function AddGroupByUrlButton() {
                 setScanError('')
               }}
             />
-            <Button size="icon" type="submit" disabled={pending} className="flex-shrink-0">
+            <Button
+              size="icon"
+              type="submit"
+              disabled={pending}
+              className="flex-shrink-0"
+            >
               {pending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (

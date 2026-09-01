@@ -1,3 +1,11 @@
+/**
+ * These exercise server-side code (Prisma, tRPC callers, Request/Response), so
+ * they need Node's globals. Upstream's jest.config.ts defaults to jsdom for
+ * component tests; this overrides it per file.
+ *
+ * @jest-environment node
+ */
+import { RecurrenceRule, SplitMode } from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import type { ExpenseFormValues, GroupFormValues } from '@/lib/schemas'
 import {
@@ -5,7 +13,6 @@ import {
   testRequiresDatabase,
 } from '@/test/database'
 import { appRouter } from '@/trpc/routers/_app'
-import { RecurrenceRule, SplitMode } from '@prisma/client'
 
 // No auth cookie/header set: exercises the anonymous/unauthenticated path,
 // which is what every test in this file actually needs (none of them touch
@@ -221,10 +228,12 @@ describe('appRouter expenses contract', () => {
       },
     })
 
-    // .toMatchObject, not .toEqual: stats.get's response has since grown
-    // fields unrelated to what this test is verifying here (e.g.
-    // monthlySpending, added by #532's spending-visuals feature).
-    await expect(caller.groups.stats.get({ groupId })).resolves.toMatchObject({
+    // .toMatchObject, not .toEqual: stats.overview returns more than the
+    // three totals this test is about. (Upstream #584/#586 split the old
+    // stats.get into overview/month-expenses/category-expenses.)
+    await expect(
+      caller.groups.stats.overview({ groupId }),
+    ).resolves.toMatchObject({
       totalGroupSpendings: 12000,
       totalParticipantSpendings: undefined,
       totalParticipantShare: undefined,

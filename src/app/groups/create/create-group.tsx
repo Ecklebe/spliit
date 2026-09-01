@@ -7,7 +7,11 @@ import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 
-export const CreateGroup = () => {
+export const CreateGroup = ({
+  defaultCurrencyCode,
+}: {
+  defaultCurrencyCode: string
+}) => {
   const { mutateAsync } = trpc.groups.create.useMutation()
   const utils = trpc.useUtils()
   const router = useRouter()
@@ -17,6 +21,7 @@ export const CreateGroup = () => {
 
   return (
     <GroupForm
+      defaultCurrencyCode={defaultCurrencyCode}
       onSubmit={async (groupFormValues) => {
         try {
           const { id: groupId } = await mutateAsync({ groupFormValues })
