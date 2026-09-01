@@ -1,8 +1,8 @@
+import { RecurrenceRule } from '@/generated/prisma/client'
 import { randomId } from '@/lib/api'
 import { prisma } from '@/lib/prisma'
 import { expenseFormSchema } from '@/lib/schemas'
 import { baseProcedure } from '@/trpc/init'
-import { RecurrenceRule } from '@prisma/client'
 import { z } from 'zod'
 
 export const processBatchProcedure = baseProcedure

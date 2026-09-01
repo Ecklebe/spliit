@@ -1,6 +1,6 @@
-import { expect, test } from '@playwright/test'
-import { createGroupViaAPI } from '../helpers/batch-api'
-import { randomId } from '@/lib/api'
+import { uniqueSuffix } from './app'
+import { expect, test } from './fixtures'
+import { createGroupViaAPI } from './trpc-factory'
 
 test('Theme selection persists after reload', async ({ page }) => {
   await page.goto('/groups')
@@ -27,12 +27,12 @@ test('Theme selection persists after reload', async ({ page }) => {
 })
 
 test('Expense displays with selected category', async ({ page }) => {
-  const expenseTitle = `Test Expense ${randomId(4)}`
+  const expenseTitle = `Test Expense ${uniqueSuffix()}`
 
   await page.goto('/groups')
   const groupId = await createGroupViaAPI(
     page,
-    `category test ${randomId(4)}`,
+    `category test ${uniqueSuffix()}`,
     ['Alice', 'Bob'],
   )
 
@@ -94,7 +94,7 @@ test('Default category is General', async ({ page }) => {
   await page.goto('/groups')
   const groupId = await createGroupViaAPI(
     page,
-    `default category ${randomId(4)}`,
+    `default category ${uniqueSuffix()}`,
     ['Alice', 'Bob'],
   )
 

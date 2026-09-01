@@ -26,6 +26,7 @@ const config: Config = {
       '<rootDir>/src/test/zitadel-provider-jest.ts',
     '^@auth/prisma-adapter$': '<rootDir>/src/test/prisma-adapter-jest.ts',
     '^@zitadel/next-auth$': '<rootDir>/src/test/zitadel-next-auth-jest.ts',
+    '^nanoid$': '<rootDir>/src/test/nanoid-jest.ts',
   },
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],

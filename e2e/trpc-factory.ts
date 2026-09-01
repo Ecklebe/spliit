@@ -1,6 +1,6 @@
+import { RecurrenceRule, SplitMode } from '@/generated/prisma/client'
 import type { AppRouter } from '@/trpc/routers/_app'
 import type { Page } from '@playwright/test'
-import { RecurrenceRule, SplitMode } from '@prisma/client'
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
 

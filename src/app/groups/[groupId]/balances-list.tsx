@@ -27,7 +27,6 @@ export function BalancesList({ balances, participants, currency }: Props) {
             data-testid="balance-row"
             data-participant={participant.name}
             className={cn('flex', isLeft || 'flex-row-reverse')}
-            data-testid={`balance-row-${participant.name}`}
           >
             <div className={cn('w-1/2 p-2', isLeft && 'text-right')}>
               {participant.name}

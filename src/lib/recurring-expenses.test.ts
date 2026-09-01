@@ -1,4 +1,4 @@
-import { RecurrenceRule } from '@prisma/client'
+import { RecurrenceRule } from '@/generated/prisma/client'
 import { calculateNextDate } from './recurring-expenses'
 
 describe('calculateNextDate', () => {

@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -7,10 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import type { Session } from '@/lib/auth'
-import { Loader2, Settings2 } from 'lucide-react'
 import { useSession } from '@zitadel/next-auth/react'
+import { Loader2, Settings2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import {

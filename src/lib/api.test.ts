@@ -1,10 +1,21 @@
+/**
+ * These exercise server-side code (Prisma, tRPC callers, Request/Response), so
+ * they need Node's globals. Upstream's jest.config.ts defaults to jsdom for
+ * component tests; this overrides it per file.
+ *
+ * @jest-environment node
+ */
+import {
+  ActivityType,
+  RecurrenceRule,
+  SplitMode,
+} from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import type { ExpenseFormValues, GroupFormValues } from '@/lib/schemas'
 import {
   checkDatabaseAvailability,
   testRequiresDatabase,
 } from '@/test/database'
-import { ActivityType, RecurrenceRule, SplitMode } from '@prisma/client'
 import {
   addComment,
   createExpense,
@@ -31,7 +42,7 @@ import {
 const createdGroupIds = new Set<string>()
 
 const baseGroupValues = (
-  name = `Test Group ${randomId(6)}`,
+  name = `Test Group ${randomId()}`,
 ): GroupFormValues => ({
   name,
   information: 'Initial information',
@@ -405,11 +416,7 @@ describe('group deletion and restoration', () => {
     const group = await createTrackedGroup(baseGroupValues('Trip to delete'))
     const [alice] = group.participants
 
-    const scheduled = await scheduleDeleteGroup(
-      group.id,
-      group.name,
-      alice!.id,
-    )
+    const scheduled = await scheduleDeleteGroup(group.id, group.name, alice!.id)
     expect(scheduled.deleteAt).not.toBeNull()
     expect(scheduled.deleteAt!.getTime()).toBeGreaterThan(Date.now())
 
@@ -429,9 +436,9 @@ describe('group deletion and restoration', () => {
 
     const group = await createTrackedGroup(baseGroupValues('Correct name'))
 
-    await expect(
-      scheduleDeleteGroup(group.id, 'Wrong name'),
-    ).rejects.toThrow('Group name does not match')
+    await expect(scheduleDeleteGroup(group.id, 'Wrong name')).rejects.toThrow(
+      'Group name does not match',
+    )
   })
 
   it('rejects restoring a group that is not scheduled for deletion', async () => {

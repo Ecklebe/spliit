@@ -103,8 +103,8 @@ export function groupExpensesByCalendarMonth<TExpense extends ExpenseWithDate>(
       expenseYear === currentYear && expenseMonth === currentMonth
         ? `${monthLabel} - ${options.currentMonthLabel}`
         : expenseYear === currentYear
-        ? monthLabel
-        : `${monthLabel} ${expenseYear}`
+          ? monthLabel
+          : `${monthLabel} ${expenseYear}`
 
     if (!groups.has(key)) {
       groups.set(key, { key, label, expenses: [] })

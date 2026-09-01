@@ -1,3 +1,4 @@
+import { DeleteGroupButton } from '@/app/groups/[groupId]/delete-group-button'
 import { SortableParticipant } from '@/app/groups/[groupId]/edit/sortable-participants'
 import { SubmitButton } from '@/components/submit-button'
 import { Button } from '@/components/ui/button'
@@ -36,7 +37,7 @@ import { Locale } from '@/i18n/request'
 import { useAnalytics } from '@/lib/analytics/context'
 import { getGroup } from '@/lib/api'
 import { defaultCurrencyList, getCurrency } from '@/lib/currency'
-import { GroupFormValues, groupFormSchema } from '@/lib/schemas'
+import { GroupFormInput, GroupFormValues, groupFormSchema } from '@/lib/schemas'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -47,7 +48,6 @@ import { useEffect, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { CurrencySelector } from './currency-selector'
 import { Textarea } from './ui/textarea'
-import { DeleteGroupButton } from '@/app/groups/[groupId]/delete-group-button'
 
 export type Props = {
   group?: NonNullable<Awaited<ReturnType<typeof getGroup>>>
@@ -68,7 +68,7 @@ export function GroupForm({
 }: Props) {
   const locale = useLocale()
   const t = useTranslations('GroupForm')
-  const form = useForm<GroupFormValues>({
+  const form = useForm<GroupFormInput, any, GroupFormValues>({
     resolver: zodResolver(groupFormSchema),
     defaultValues: group
       ? {
@@ -461,16 +461,20 @@ export function GroupForm({
           )}
         </div>
 
-        {group && !group.deleteAt && (<Card className="border-red-700">
-          <CardHeader>
-            <CardTitle className="text-red-700">{t('Delete.title')}</CardTitle>
-            <CardDescription>{t('Delete.description')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {group && <DeleteGroupButton group={group} />}
-          </CardContent>
-        </Card>)}
-        </form>
+        {group && !group.deleteAt && (
+          <Card className="border-red-700">
+            <CardHeader>
+              <CardTitle className="text-red-700">
+                {t('Delete.title')}
+              </CardTitle>
+              <CardDescription>{t('Delete.description')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {group && <DeleteGroupButton group={group} />}
+            </CardContent>
+          </Card>
+        )}
+      </form>
     </Form>
   )
 }

@@ -1,17 +1,19 @@
-import { randomId } from '@/lib/api'
-import { expect, test } from '@playwright/test'
-import { signInAsTestUser, signOut } from '../helpers/auth'
-import { createGroupViaAPI } from '../helpers/batch-api'
-import { createGroup } from '../helpers'
+import { createGroup, uniqueSuffix } from './app'
+import { signInAsTestUser, signOut } from './auth'
+import { expect, test } from './fixtures'
+import { createGroupViaAPI } from './trpc-factory'
 
 test.describe('Group Cloud Sync', () => {
   test('sync and unsync group flow', async ({ page }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
     // Create a group
-    const groupName = `Sync Test ${randomId(4)}`
-    const groupId = await createGroup({page, groupName, participants: ['Alice', 'Bob']})
+    const groupName = `Sync Test ${uniqueSuffix()}`
+    const groupId = await createGroup(page, {
+      name: groupName,
+      participants: ['Alice', 'Bob'],
+    })
 
     // Go to groups list where sync buttons are
     await page.goto('/groups')
@@ -39,7 +41,7 @@ test.describe('Group Cloud Sync', () => {
   })
 
   test('auto-sync new groups when preference enabled', async ({ page }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
     // Enable auto-sync preference
@@ -56,8 +58,11 @@ test.describe('Group Cloud Sync', () => {
     await expect(autoSyncToggle).toHaveAttribute('data-state', 'checked')
 
     // Create a new group via UI (not API) to trigger auto-sync
-    const groupName = `Auto Sync Test ${randomId(4)}`
-    await createGroup({page, groupName, participants: ['Alice', 'Bob']})
+    const groupName = `Auto Sync Test ${uniqueSuffix()}`
+    await createGroup(page, {
+      name: groupName,
+      participants: ['Alice', 'Bob'],
+    })
 
     // Go to groups list to check sync status
     await page.goto('/groups')
@@ -76,14 +81,14 @@ test.describe('Group Cloud Sync', () => {
     await page.goto('/groups')
 
     // Create local groups before sign-in
-    const localGroup1Name = `Local ${randomId(4)}`
-    const localGroup2Name = `Local ${randomId(4)}`
+    const localGroup1Name = `Local ${uniqueSuffix()}`
+    const localGroup2Name = `Local ${uniqueSuffix()}`
 
     await createGroupViaAPI(page, localGroup1Name, ['Alice', 'Bob'])
     await createGroupViaAPI(page, localGroup2Name, ['Charlie', 'Dave'])
 
     // Sign in (will trigger hydration)
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
     // Go to groups page
@@ -95,14 +100,14 @@ test.describe('Group Cloud Sync', () => {
   })
 
   test('starred and archived sync across devices', async ({ browser }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
 
     // Device 1: Sign in and star a group
     const context1 = await browser.newContext()
     const page1 = await context1.newPage()
 
     await signInAsTestUser(page1, testEmail)
-    const groupName = `Star Test ${randomId(4)}`
+    const groupName = `Star Test ${uniqueSuffix()}`
     const groupId = await createGroupViaAPI(page1, groupName, ['Alice', 'Bob'])
 
     await page1.goto(`/groups`)
@@ -113,13 +118,17 @@ test.describe('Group Cloud Sync', () => {
       .first()
     await expect(syncButton).toBeVisible()
     await syncButton.click()
-    await expect(page1.locator('svg.lucide-cloud.text-blue-500').first()).toBeVisible()
+    await expect(
+      page1.locator('svg.lucide-cloud.text-blue-500').first(),
+    ).toBeVisible()
 
     // Star the group
     const starButton = page1.getByRole('button', { name: 'Add to favorites' })
     await expect(starButton).toBeVisible()
     await starButton.click()
-    await expect(page1.getByRole('button', { name: 'Remove from favorites' })).toBeVisible()
+    await expect(
+      page1.getByRole('button', { name: 'Remove from favorites' }),
+    ).toBeVisible()
 
     await context1.close()
 
@@ -133,7 +142,9 @@ test.describe('Group Cloud Sync', () => {
     await page2.goto('/groups')
 
     // The starred group should appear in starred section
-    const starredSection = page2.getByRole('button', { name: 'Remove from favorites' })
+    const starredSection = page2.getByRole('button', {
+      name: 'Remove from favorites',
+    })
     await expect(starredSection).toBeVisible()
     await expect(page2.getByText(groupName)).toBeVisible()
 
@@ -141,11 +152,14 @@ test.describe('Group Cloud Sync', () => {
   })
 
   test('logout with clear option removes local data', async ({ page }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
     // Create a group
-    await createGroupViaAPI(page, `Clear Test ${randomId(4)}`, ['Alice', 'Bob'])
+    await createGroupViaAPI(page, `Clear Test ${uniqueSuffix()}`, [
+      'Alice',
+      'Bob',
+    ])
 
     // Verify group appears in recents
     await page.goto('/groups')
@@ -160,11 +174,11 @@ test.describe('Group Cloud Sync', () => {
   })
 
   test('logout without clear keeps local data', async ({ page }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
     // Create a group
-    const groupName = `Keep Test ${randomId(4)}`
+    const groupName = `Keep Test ${uniqueSuffix()}`
     await createGroupViaAPI(page, groupName, ['Alice', 'Bob'])
 
     await page.goto('/groups')

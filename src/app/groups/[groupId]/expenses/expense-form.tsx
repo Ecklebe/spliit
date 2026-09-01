@@ -45,6 +45,7 @@ import {
 import { RuntimeFeatureFlags } from '@/lib/featureFlags'
 import { useActiveUser, useCurrencyRate } from '@/lib/hooks'
 import { getLocationFromSearchParams } from '@/lib/location'
+import { normalizeNumberInput } from '@/lib/number-input'
 import {
   ExpenseFormInput,
   ExpenseFormValues,
@@ -450,7 +451,9 @@ export function ExpenseForm({
         groupCurrency,
       )
       if (converted !== null) {
-        const v = enforceCurrencyPattern(converted)
+        const v = normalizeNumberInput(converted, {
+          decimalDigits: groupCurrency.decimal_digits,
+        })
         const income = Number(v) < 0
         setIsIncome(income)
         if (income) form.setValue('isReimbursement', false)
@@ -491,7 +494,11 @@ export function ExpenseForm({
         'originalAmount',
         // String for consistent form handling, so trailing zeros survive; the schema
         // coerces it, and it maps '' back to undefined.
-        Number(converted) === 0 ? '' : enforceCurrencyPattern(converted),
+        Number(converted) === 0
+          ? ''
+          : normalizeNumberInput(converted, {
+              decimalDigits: originalCurrency.decimal_digits,
+            }),
       )
     }
   }, [

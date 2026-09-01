@@ -142,7 +142,11 @@ export async function deleteExpense(
   })
 }
 
-export async function scheduleDeleteGroup(groupId: string, groupName: string, participantId?: string) {
+export async function scheduleDeleteGroup(
+  groupId: string,
+  groupName: string,
+  participantId?: string,
+) {
   const existingGroup = await getGroup(groupId)
   if (!existingGroup) throw new Error('Invalid group ID')
   if (existingGroup.name !== groupName)

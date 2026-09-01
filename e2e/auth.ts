@@ -100,7 +100,7 @@ export async function signOut(
   }
 
   // Wait for sign out to complete
-  await expect(page.getByText('Sign in to sync your groups')).toBeVisible();
+  await expect(page.getByText('Sign in to sync your groups')).toBeVisible()
 }
 
 /**
@@ -111,7 +111,7 @@ export async function isSignedIn(page: Page): Promise<boolean> {
   const signedOutElement = page.getByText('Sign in to sync your groups')
   const signedInElement = page.getByText('Signed in as')
   return Promise.race([
-    signedInElement.waitFor({state: 'visible'}).then(() => true),
-    signedOutElement.waitFor({state: 'visible'}).then(() => false)
+    signedInElement.waitFor({ state: 'visible' }).then(() => true),
+    signedOutElement.waitFor({ state: 'visible' }).then(() => false),
   ])
 }

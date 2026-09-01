@@ -1,17 +1,18 @@
-import { randomId } from '@/lib/api'
-import { expect, test } from '@playwright/test'
-import { signInAsTestUser } from '../helpers/auth'
-import { createGroupViaAPI } from '../helpers/batch-api'
+import { uniqueSuffix } from './app'
+import { signInAsTestUser } from './auth'
+import { expect, test } from './fixtures'
+import { createGroupViaAPI } from './trpc-factory'
 
 test.describe('Sync Error Handling', () => {
   test('handles network errors gracefully', async ({ page, context }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
-    const groupId = await createGroupViaAPI(page, `Error Test ${randomId(4)}`, [
-      'Alice',
-      'Bob',
-    ])
+    const groupId = await createGroupViaAPI(
+      page,
+      `Error Test ${uniqueSuffix()}`,
+      ['Alice', 'Bob'],
+    )
 
     await page.goto('/groups')
     await page.waitForLoadState('networkidle')
@@ -56,13 +57,14 @@ test.describe('Sync Error Handling', () => {
   })
 
   test('handles server errors with retry', async ({ page, context }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
-    const groupId = await createGroupViaAPI(page, `Retry Test ${randomId(4)}`, [
-      'Alice',
-      'Bob',
-    ])
+    const groupId = await createGroupViaAPI(
+      page,
+      `Retry Test ${uniqueSuffix()}`,
+      ['Alice', 'Bob'],
+    )
 
     await page.goto('/groups')
     await page.waitForLoadState('networkidle')
@@ -110,7 +112,7 @@ test.describe('Sync Error Handling', () => {
   })
 
   test('shows appropriate error for invalid group', async ({ page }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
     // Try to access a non-existent group
@@ -129,11 +131,11 @@ test.describe('Sync Error Handling', () => {
   })
 
   test('handles concurrent sync operations', async ({ page }) => {
-    const testEmail = `test-${randomId(4)}@example.com`
+    const testEmail = `test-${uniqueSuffix()}@example.com`
     await signInAsTestUser(page, testEmail)
 
-    const group1Name = `Concurrent 1 ${randomId(4)}`
-    const group2Name = `Concurrent 2 ${randomId(4)}`
+    const group1Name = `Concurrent 1 ${uniqueSuffix()}`
+    const group2Name = `Concurrent 2 ${uniqueSuffix()}`
 
     const group1Id = await createGroupViaAPI(page, group1Name, ['Alice', 'Bob'])
     const group2Id = await createGroupViaAPI(page, group2Name, [

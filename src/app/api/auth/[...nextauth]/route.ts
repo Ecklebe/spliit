@@ -40,9 +40,7 @@ function withCorrectedOrigin<Req extends Request>(
   }
 }
 
-export const GET = env.OIDC_PROVIDERS.length > 0
-  ? withCorrectedOrigin(handlers.GET)
-  : notFound
-export const POST = env.OIDC_PROVIDERS.length > 0
-  ? withCorrectedOrigin(handlers.POST)
-  : notFound
+export const GET =
+  env.OIDC_PROVIDERS.length > 0 ? withCorrectedOrigin(handlers.GET) : notFound
+export const POST =
+  env.OIDC_PROVIDERS.length > 0 ? withCorrectedOrigin(handlers.POST) : notFound

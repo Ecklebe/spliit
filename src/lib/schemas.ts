@@ -9,6 +9,7 @@ export const groupFormSchema = z
     information: z.string().optional(),
     currency: z.string().min(1, 'min1').max(5, 'max5'),
     currencyCode: z.union([z.string().length(3).nullish(), z.literal('')]), // ISO-4217 currency code
+    fixedExpenseDateGroups: z.boolean().default(false),
     participants: z
       .array(
         z.object({
@@ -32,7 +33,11 @@ export const groupFormSchema = z
     })
   })
 
-export type GroupFormValues = z.infer<typeof groupFormSchema>
+export type GroupFormValues = z.output<typeof groupFormSchema>
+// Raw form input type. `fixedExpenseDateGroups` has a zod default, so the
+// input and output types differ and react-hook-form needs both - same split
+// as ExpenseFormInput/ExpenseFormValues below.
+export type GroupFormInput = z.input<typeof groupFormSchema>
 
 const inputCoercedToNumber = z.union([
   z.number(),
@@ -231,3 +236,9 @@ export type SplittingOptions = {
   splitMode: SplitMode
   paidFor: ExpenseFormValues['paidFor'] | null
 }
+
+export const commentFormSchema = z.object({
+  comment: z.string(),
+})
+
+export type CommentFormValues = z.infer<typeof commentFormSchema>
