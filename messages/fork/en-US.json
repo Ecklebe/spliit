@@ -1,0 +1,264 @@
+{
+  "Header": {
+    "login": "Login",
+    "settings": "Settings"
+  },
+  "Expenses": {
+    "Groups": {
+      "currentMonth": "Current Month"
+    }
+  },
+  "Groups": {
+    "NoRecent": {
+      "enableCloudSync": "Enable cloud sync",
+      "enableCloudSyncHelp": "to access your groups across devices."
+    },
+    "Card": {
+      "actions": {
+        "favoriteTooltip": "Add to favorites",
+        "syncTooltip": "Sync to cloud",
+        "unfavoriteTooltip": "Remove from favorites",
+        "unsyncTooltip": "Unsync from cloud"
+      },
+      "toast": {
+        "unsyncRemoved": {
+          "description": "The group has been removed from this device and unsynced from your account",
+          "title": "Group removed and unsynced"
+        }
+      },
+      "unsyncDialog": {
+        "actions": {
+          "removeAndUnsync": "Remove and unsync"
+        },
+        "description": "This group is synced to your account. What would you like to do?",
+        "title": "Remove synced group"
+      }
+    },
+    "CreateErrors": {
+      "sessionExpiredDescription": "This instance now requires signing in to create new groups. Please sign in and try again.",
+      "sessionExpiredTitle": "Could not create group"
+    },
+    "CreateOptions": {
+      "importFromFile": "Import from file",
+      "newGroup": "New group",
+      "openMenu": "Open create options"
+    },
+    "ImportDialog": {
+      "successDescription": "Group {name} was created from import.",
+      "successTitle": "Group created"
+    }
+  },
+  "GroupForm": {
+    "Delete": {
+      "description": "Deleting a group will result in a 30 days deactivation period, after which all data will be permanently deleted and unrecoverable.",
+      "title": "Delete group"
+    },
+    "GroupSettings": {
+      "FixedExpenseDateGroupsField": {
+        "description": "Useful for recurring monthly expenses for roommates and shared bills.",
+        "label": "Group expenses by calendar month"
+      },
+      "description": "These settings are shared with everyone who uses this group.",
+      "title": "Group settings"
+    }
+  },
+  "ExpenseForm": {
+    "location": "Location",
+    "locationDescription": "Where was this made?"
+  },
+  "Settings": {
+    "Account": {
+      "signOut": "Sign out",
+      "signOutDialog": {
+        "clearGroups": "Yes, clear groups",
+        "description": "Do you want to clear synced groups from this device?",
+        "keepGroups": "No, keep groups"
+      },
+      "signedInAs": "Signed in as"
+    },
+    "CloudSync": {
+      "description": {
+        "signedIn": "Manage your synced groups and preferences",
+        "signedOut": "Sign in to sync your groups across devices"
+      },
+      "title": "Cloud Sync"
+    },
+    "SignIn": {
+      "none": "No sign-in providers are configured for this instance.",
+      "signInWith": "Sign in with {provider}"
+    },
+    "SyncAll": {
+      "actions": {
+        "syncNow": "Sync all groups now",
+        "syncing": "Syncing..."
+      },
+      "result": {
+        "skipped": "Skipped {count} group(s)",
+        "synced": "Synced {count} group(s)"
+      }
+    },
+    "SyncPreferences": {
+      "syncNewGroups": {
+        "description": "Automatically sync when visiting or creating groups",
+        "label": "Sync new groups automatically"
+      }
+    },
+    "SyncedGroups": {
+      "actions": {
+        "unsync": "Unsync"
+      },
+      "count": "{count} group(s) synced to the cloud",
+      "empty": "No synced groups yet"
+    },
+    "sections": {
+      "account": "Account",
+      "actions": "Actions",
+      "preferences": "Preferences",
+      "syncedGroups": "Synced Groups"
+    }
+  },
+  "Admin": {
+    "description": "Read-only overview of this instance.",
+    "requireLoginToggle": {
+      "description": "When enabled, only signed-in users can create new groups. Existing groups remain accessible to everyone via their link - this only affects new group creation.",
+      "errorTitle": "Could not update setting",
+      "label": "Require login to create groups"
+    },
+    "stats": {
+      "expenses": "Expenses",
+      "groups": "Groups",
+      "participants": "Participants",
+      "signedInUsers": "Signed-in Users",
+      "syncedGroups": "Synced Groups"
+    },
+    "title": "Admin"
+  },
+  "AuthError": {
+    "actions": {
+      "goToSettings": "Go to Settings"
+    },
+    "messages": {
+      "configuration": "Authentication configuration error. Please contact support.",
+      "default": "An authentication error occurred. Please try again."
+    },
+    "subtitle": "Unable to sign you in",
+    "title": "Authentication Error"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "syncing": "Syncing..."
+  },
+  "DeleteGroupButton": {
+    "description": "Do you really want to delete this group? To confirm, please enter the group name below.",
+    "groupNameField": "Group name",
+    "title": "Delete group"
+  },
+  "DeleteGroupNotice": {
+    "description": "This group was scheduled for deletion and will be permanently deleted on {date}. If you want to restore it, click the button below.",
+    "restore": "Restore group",
+    "title": "Group scheduled for deletion"
+  },
+  "ExpenseComments": {
+    "addCaption": "Add Comment",
+    "addComment": "Add Comment",
+    "addingCaption": "Adding",
+    "cancel": "Cancel",
+    "commentPlaceholder": "Enter your comment",
+    "editComment": "Edit Comment",
+    "noActiveParticipant": "Select an active participant to add and edit comments",
+    "noComments": "This expense does not contain any comments yet.",
+    "saveCaption": "Save Comment",
+    "savingCaption": "Saving",
+    "title": "Comments"
+  },
+  "FileImport": {
+    "analysisAwaiting": "Awaiting file analysis…",
+    "analysisCategoryTitle": "Category mapping warnings",
+    "analysisErrorsTitle": "Row errors",
+    "analysisExplanation": "Select a file to analyze its content before importing.",
+    "analysisFatalHint": "Fix these errors to enable import.",
+    "analysisGeneralWarningsTitle": "General warnings",
+    "analysisHeaderTitle": "Header issues",
+    "buttonLabel": "Open import dialog",
+    "errorTitle": "Error",
+    "fileLabel": "Select a file",
+    "fileReadError": "Could not read the selected file.",
+    "generalInfoFormat": "Format",
+    "generalInfoInvalidRows": "Invalid rows",
+    "generalInfoParticipants": "Participants and balances",
+    "generalInfoParticipantsEmpty": "No participant information detected.",
+    "generalInfoRows": "Rows",
+    "generalInfoTitle": "General information",
+    "generalInfoTotal": "Total amount",
+    "generalInfoUnknown": "Unknown",
+    "import": "Import",
+    "importCancel": "Cancel import",
+    "importCanceling": "Cancelling…",
+    "importProgressLabel": "Importing expenses",
+    "importResultCancelledSimple": "Import cancelled",
+    "importResultCompleted": "Imported {created} of {total} rows",
+    "importResultConfirm": "Continue",
+    "importing": "Importing…",
+    "newGroupNameLabel": "New group name",
+    "newGroupNamePlaceholder": "Enter a group name (optional)",
+    "previewErrorTitle": "We couldn't analyze your file",
+    "processing": "Processing…",
+    "title": "Import group from file",
+    "uploadDragDescription": "Supported: Spliit JSON and Splitwise CSV",
+    "uploadDragTitle": "Drop a file here or click to select"
+  },
+  "FileImportErrors": {
+    "fileEmpty": "The uploaded file was empty.",
+    "invalidAmount": "Invalid amount in one or more rows.",
+    "invalidDate": "Invalid expense date in one or more rows.",
+    "noParticipants": "No participants defined in file."
+  },
+  "SyncErrors": {
+    "auth": {
+      "required": "You must be logged in to perform this action"
+    },
+    "notSynced": "Group is not synced",
+    "toast": {
+      "archiveFailed": "Failed to sync archive status to cloud",
+      "saveLocalFailed": "Group saved locally but not synced to cloud",
+      "starFailed": "Failed to sync star status to cloud",
+      "title": "Sync failed",
+      "unarchiveFailed": "Failed to sync unarchive status to cloud",
+      "unstarFailed": "Failed to sync unstar status to cloud"
+    },
+    "validation": {
+      "invalidParticipant": "Invalid participant for this group",
+      "invalidParticipantForGroup": "Invalid participant for group {groupId}",
+      "maxGroups": "Maximum 100 groups per request",
+      "tooManyGroups": "Cannot sync more than {max} groups at once"
+    }
+  },
+  "Stats": {
+    "MonthlySpending": {
+      "title": "Monthly spending",
+      "description": "Spending by month and category.",
+      "rangeLabel": "Range",
+      "groupingLabel": "Category grouping",
+      "chartTypeLabel": "Chart type",
+      "stackedTitle": "Monthly categories",
+      "breakdownTitle": "{range} category breakdown",
+      "roundAmountsLabel": "Round amounts",
+      "income": "Income",
+      "noData": "No spending data yet.",
+      "ChartTypes": {
+        "bars": "Stacked bars",
+        "columns": "Stacked columns"
+      },
+      "RangeOptions": {
+        "three": "3 months",
+        "six": "6 months",
+        "twelve": "12 months",
+        "all": "All"
+      },
+      "GroupingOptions": {
+        "categoryGroup": "Categories",
+        "category": "Detailed"
+      }
+    }
+  }
+}

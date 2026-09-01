@@ -36,6 +36,24 @@ export type Locale = keyof typeof localeLabels
 export type Locales = ReadonlyArray<Locale>
 export const defaultLocale: Locale = 'en-US'
 
+/**
+ * Strings for this fork's own features (expense comments, locations, file
+ * import, group sync, admin) live in messages/fork/ rather than in the shared
+ * catalogues, which are left byte-identical to upstream. That keeps upstream's
+ * frequent Weblate merges from ever touching us, and keeps our keys out of
+ * their translation workflow. Layered here in the same order as the base
+ * catalogues, so a fork locale falls back to fork en-US the same way.
+ */
+async function loadForkMessages(locale: string) {
+  try {
+    return (await import(`../../messages/fork/${locale}.json`)).default
+  } catch {
+    // No overlay for this locale yet - Weblate has not been pointed at
+    // messages/fork/, so most locales legitimately have none.
+    return {}
+  }
+}
+
 export default getRequestConfig(async () => {
   const locale = await getUserLocale()
   const localeMessages = (await import(`../../messages/${locale}.json`)).default
@@ -49,6 +67,14 @@ export default getRequestConfig(async () => {
       localeMessages,
     ) as any
   }
+
+  const forkDefault = await loadForkMessages(defaultLocale)
+  const forkLocale =
+    locale === defaultLocale ? forkDefault : await loadForkMessages(locale)
+  messages = deepmerge(
+    messages,
+    deepmerge(forkDefault, forkLocale) as any,
+  ) as any
 
   return {
     locale,
