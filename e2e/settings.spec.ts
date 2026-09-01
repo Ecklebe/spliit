@@ -1,4 +1,4 @@
-import { uniqueSuffix } from './app'
+import { expenseCard, uniqueSuffix } from './app'
 import { expect, test } from './fixtures'
 import { createGroupViaAPI } from './trpc-factory'
 
@@ -83,11 +83,10 @@ test('Expense displays with selected category', async ({ page }) => {
   await createButton.click()
   await page.waitForURL(/\/groups\/[^/]+\/expenses$/)
 
-  // Verify expense appears with title
-  const expenseTitleElement = page
-    .getByTestId('expense-title')
-    .filter({ hasText: expenseTitle })
-  await expect(expenseTitleElement).toBeVisible()
+  // Verify the expense appears. Located through upstream's expenseCard
+  // helper: the fork's old `expense-title` test id is gone, expense-card.tsx
+  // now carries a single `expense-card` id.
+  await expect(expenseCard(page, expenseTitle)).toBeVisible()
 })
 
 test('Default category is General', async ({ page }) => {

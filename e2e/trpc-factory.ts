@@ -1,8 +1,13 @@
-import { RecurrenceRule, SplitMode } from '@/generated/prisma/client'
 import type { AppRouter } from '@/trpc/routers/_app'
 import type { Page } from '@playwright/test'
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
+import type { SplitMode } from './app'
+
+// Declared locally rather than imported from the generated Prisma client:
+// that client is ESM-only under Prisma 7 and Playwright's CommonJS loader
+// cannot evaluate it. These mirror the enum in prisma/schema.prisma.
+type RecurrenceRule = 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY'
 
 interface ExpenseFormValues {
   expenseDate: Date
@@ -186,7 +191,7 @@ export async function createExpensesViaAPI(
       amount: expense.amount,
       paidBy: payer.id,
       paidFor,
-      splitMode: expense.splitMode || SplitMode.EVENLY,
+      splitMode: expense.splitMode ?? 'EVENLY',
       isReimbursement: expense.isReimbursement || false,
       recurrenceRule: expense.recurrenceRule || 'NONE',
       saveDefaultSplittingOptions: true,

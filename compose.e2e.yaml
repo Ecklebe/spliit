@@ -23,6 +23,20 @@ services:
       POSTGRES_PRISMA_URL: postgresql://postgres:e2e@db:5432/spliit_e2e
       POSTGRES_URL_NON_POOLING: postgresql://postgres:e2e@db:5432/spliit_e2e
       NEXT_TELEMETRY_DISABLED: '1'
+      # Login/sync is a fork feature and stays hidden unless OIDC_PROVIDERS is
+      # set, so the specs that cover it (group-sync, sync-error-handling,
+      # settings) need a provider registered here. No real IdP is involved:
+      # e2e/auth.ts mints a session cookie with AUTH_SECRET directly, the same
+      # way @auth/core signs one after a real sign-in. The issuer below is
+      # never contacted; it only has to satisfy env.ts's validation.
+      AUTH_SECRET: e2e-only-secret-not-used-anywhere-else
+      AUTH_URL: http://localhost:${E2E_HOST_PORT:-3000}
+      OIDC_PROVIDERS: e2e
+      OIDC_PROVIDER_E2E_NAME: E2E
+      OIDC_PROVIDER_E2E_ISSUER: https://idp.invalid
+      OIDC_PROVIDER_E2E_CLIENT_ID: e2e-client
+      OIDC_PROVIDER_E2E_CLIENT_SECRET: e2e-client-secret
+      ENABLE_ADMIN: 'true'
     restart: 'no'
     depends_on:
       db:
@@ -48,7 +62,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: e2e
       POSTGRES_DB: spliit_e2e
-    # No published port, so this never collides with a local postgres.
+    ports:
+      # Published so e2e/auth.ts can seed the User and SyncProfile rows that a
+      # real sign-in would create. A high port, to avoid colliding with a local
+      # postgres on 5432.
+      - '${E2E_DB_HOST_PORT:-55433}:5432'
     #
     # No named volume either -- but note the postgres image itself declares
     # `VOLUME /var/lib/postgresql/data`, so Compose still creates an *anonymous*

@@ -19,6 +19,15 @@ E2E_HOST_PORT="${E2E_HOST_PORT:-3000}"
 export E2E_HOST_PORT
 export E2E_BASE_URL="${E2E_BASE_URL:-http://localhost:${E2E_HOST_PORT}}"
 
+# The fork's sync specs seed a User/SyncProfile directly (see e2e/auth.ts),
+# because there is no live IdP to script a real sign-in against.
+E2E_DB_HOST_PORT="${E2E_DB_HOST_PORT:-55433}"
+export E2E_DB_HOST_PORT
+export E2E_DATABASE_URL="${E2E_DATABASE_URL:-postgresql://postgres:e2e@localhost:${E2E_DB_HOST_PORT}/spliit_e2e}"
+# Must match compose.e2e.yaml's AUTH_SECRET: e2e/auth.ts signs the session
+# cookie with it in the test process, and the app verifies it in the container.
+export AUTH_SECRET="${AUTH_SECRET:-e2e-only-secret-not-used-anywhere-else}"
+
 compose() { docker compose -f compose.e2e.yaml "$@"; }
 
 up() {
