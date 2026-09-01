@@ -4,6 +4,7 @@ import {
   type ImportParsedGroupInfo,
 } from '@/lib/imports/types'
 // Self-registering formats (side effect imports)
+import '@/lib/imports/formats/splitwise'
 import '@/lib/imports/spliit-json'
 
 // Registry entry points

@@ -204,7 +204,7 @@
     "previewErrorTitle": "We couldn't analyze your file",
     "processing": "Processing…",
     "title": "Import group from file",
-    "uploadDragDescription": "Supported: JSON (Spliit-JSON) and debug files",
+    "uploadDragDescription": "Supported: Spliit JSON and Splitwise CSV",
     "uploadDragTitle": "Drop a file here or click to select"
   },
   "FileImportErrors": {

@@ -163,7 +163,7 @@
     "previewErrorTitle": "Die Datei konnte nicht analysiert werden",
     "processing": "Verarbeite…",
     "title": "Gruppe aus Datei importieren",
-    "uploadDragDescription": "Unterstützt: JSON (Spliit-JSON) und Debug-Dateien",
+    "uploadDragDescription": "Unterstützt: Spliit JSON und Splitwise CSV",
     "uploadDragTitle": "Datei hier ablegen oder klicken, um auszuwählen"
   },
   "FileImportErrors": {
